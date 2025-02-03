@@ -63,7 +63,7 @@ namespace mercury_202_2 {
     unsigned long d = start;
 
     this->write_array(command, 7);
-    flush();
+    this->flush();
 
   //    digitalWrite(0, LOW);
 
