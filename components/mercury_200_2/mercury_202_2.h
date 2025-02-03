@@ -9,7 +9,7 @@ static const char *TAG = "mercury_200_2";
 namespace esphome {
   namespace mercury_200_2 {
 
-    class MercuryComponent: public PollingComponent, public UARTDevice {
+    class MercuryComponent : public PollingComponent, public UARTDevice {
       public:
         void setup() override;
         void dump_config() override;
