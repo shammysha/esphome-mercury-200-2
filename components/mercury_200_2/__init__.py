@@ -16,14 +16,11 @@ AUTO_LOAD = ["sensor"]
 
 DEPENDENCIES = ["uart"]
 
-DOMAIN = "mercury_200_2";
-COMPONENT_CLASS = "MercuryComponent";
-
 CONF_MERCURY_ID = "mercury_200_2_id"
 
-mercury_200_2_ns = cg.esphome_ns.namespace(DOMAIN)
+mercury_200_2_ns = cg.esphome_ns.namespace("mercury_200_2")
 MercuryComponent = mercury_200_2_ns.class_(
-    COMPONENT_CLASS, cg.PollingComponent, uart.UARTDevice
+     "MercuryComponent", cg.PollingComponent, uart.UARTDevice
 )
 
 CONFIG_SCHEMA = cv.All(
