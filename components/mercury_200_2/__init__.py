@@ -19,9 +19,7 @@ DEPENDENCIES = ["uart"]
 CONF_MERCURY_ID = "mercury_200_2_id"
 
 mercury_200_2_ns = cg.esphome_ns.namespace("mercury_200_2")
-MercuryComponent = mercury_200_2_ns.class_(
-     "MercuryComponent", cg.PollingComponent, uart.UARTDevice
-)
+MercuryComponent = mercury_200_2_ns.class_("MercuryComponent", cg.PollingComponent, uart.UARTDevice)
 
 CONFIG_SCHEMA = cv.All(
     cv.Schema(
@@ -30,7 +28,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Required(CONF_ADDRESS): cv.Range(min=100000, max=999999)            
         }
     )
-    .extend(cv.POLLING_COMPONENT_SCHEMA)    
+    .extend(cv.polling_component_schema("60s"))    
     .extend(uart.UART_DEVICE_SCHEMA)           
 )
 
