@@ -27,7 +27,7 @@ CONFIG_SCHEMA = cv.All(
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(MercuryComponent),
-            cv.Required(CONF_ADDRESS): vol.Range(min=100000, max=999999)            
+            cv.Required(CONF_ADDRESS): cv.Range(min=100000, max=999999)            
         }
     )
     .extend(cv.POLLING_COMPONENT_SCHEMA)    
