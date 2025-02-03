@@ -9,6 +9,8 @@ static const char *TAG = "mercury_200_2";
 namespace esphome {
   namespace mercury_200_2 {
 
+    class MercurySensor : public sensor::Sensor {};
+
     class MercuryComponent : public PollingComponent, public uart::UARTDevice {
       public:
         void setup() override;
@@ -63,6 +65,4 @@ namespace esphome {
 
         void set_step();
     };
-
-    class MercurySensor : public sensor::Sensor {};
   }}
