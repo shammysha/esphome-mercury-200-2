@@ -7,9 +7,7 @@ from esphome.const import (
     CONF_NAME,
     CONF_AUTH,
     CONF_PASSWORD,
-    CONF_ADDRESS,
-    DOMAIN,
-    COMPONENT_CLASS
+    CONF_ADDRESS
 )
 
 CODEOWNERS = ["@Shammysha"]
