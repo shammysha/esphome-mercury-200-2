@@ -129,8 +129,6 @@ namespace mercury_202_2 {
       this->step = 0;
     }
   }
-};
-
 
 }
 }
