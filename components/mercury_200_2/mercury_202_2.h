@@ -20,12 +20,12 @@ namespace esphome {
         void set_address(int address) { this->address_ = address; }
 
         void register_power_sensor(MercurySensor *sensor) { this->power_ = sensor; }
-        void register_current_sensor(MercurySensor *sensor)) { this->current_ = sensor; }
-        void register_voltage_sensor(MercurySensor *sensor)) { this->voltage_ = sensor; }
-        void register_tariff1_sensor(MercurySensor *sensor)) { this->tariff1_ = sensor; }
-        void register_tariff2_sensor(MercurySensor *sensor)) { this->tariff2_ = sensor; }
-        void register_tariff3_sensor(MercurySensor *sensor)) { this->tariff3_ = sensor; }
-        void register_total_sensor(MercurySensor *sensor)) { this->total_ = sensor; }
+        void register_current_sensor(MercurySensor *sensor) { this->current_ = sensor; }
+        void register_voltage_sensor(MercurySensor *sensor) { this->voltage_ = sensor; }
+        void register_tariff1_sensor(MercurySensor *sensor) { this->tariff1_ = sensor; }
+        void register_tariff2_sensor(MercurySensor *sensor) { this->tariff2_ = sensor; }
+        void register_tariff3_sensor(MercurySensor *sensor) { this->tariff3_ = sensor; }
+        void register_total_sensor(MercurySensor *sensor) { this->total_ = sensor; }
 
 
       private:
