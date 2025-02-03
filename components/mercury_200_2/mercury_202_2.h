@@ -48,9 +48,6 @@ namespace esphome {
         int counter{0};
         int step{0};
 
-        unsigned char electrical_parameters[7]; // Байты на получене мгновенных значений
-        unsigned char tarif[7]; // Байты на получение тарифа
-
         typedef unsigned char uchar;
 
         long pow(long a, int s);
