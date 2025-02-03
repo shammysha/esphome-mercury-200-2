@@ -3,8 +3,6 @@
 namespace esphome {
 namespace mercury_202_2 {
 
-  MercuryComponent::MercuryComponent();
-
   long MercuryComponent::pow(long a, int s) {
     long out = 1;
     for (int i = 0; i < s; i++)
