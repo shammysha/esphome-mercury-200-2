@@ -94,7 +94,7 @@ namespace esphome {
           this->main_uart_read(this->tarif_);
           break;
 
-        case 1: } else if (this->step_== 1) {
+        case 1:
           this->main_uart_read(this->electrical_parameters_);
           break;
       }
