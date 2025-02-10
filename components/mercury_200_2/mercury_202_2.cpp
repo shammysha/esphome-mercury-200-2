@@ -182,7 +182,7 @@ namespace esphome {
       int currenttime = millis();
       if (currenttime < this->starttime_ + this->delay_) { return; };
 
-      if (available <= 0) {
+      if (available() <= 0) {
         this->state_ = State::SEND_METRICS_CMD;
       }
     }
