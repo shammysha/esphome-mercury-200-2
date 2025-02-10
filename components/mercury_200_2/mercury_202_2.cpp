@@ -85,15 +85,6 @@ namespace esphome {
           }
         } break;
 
-        case State::IDLE: {
-          if (start > this->last_updated_ + this->interval_) {
-            this->state_ = State::SEND_METRICS_CMD;
-            this->last_updated_ = start;
-
-            ESP_LOGD(TAG, "Starting data collection");
-          }
-        } break;
-
         case State::SEND_METRICS_CMD: {
           write_array(this->metrics_, 7);
           flush();
@@ -148,6 +139,12 @@ namespace esphome {
 
         default:
           break;
+      }
+      if (this->state != State::NOT_READY && start > this->last_updated_ + this->interval_) {
+        this->state_ = State::SEND_METRICS_CMD;
+        this->last_updated_ = start;
+
+        ESP_LOGI(TAG, "Starting data collection");
       }
     }
 
