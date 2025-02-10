@@ -1,4 +1,4 @@
-#include "mercury_202_2.h"
+#include "./mercury_202_2.h"
 
 namespace esphome {
 namespace mercury_202_2 {
