@@ -80,12 +80,11 @@ namespace esphome {
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           write_array(this->metrics_, 7);
-          flush();
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
 
-          delay(100);
+          delay(300);
           break;
 
         case State::WAIT_METRICS_INFO:
@@ -106,12 +105,11 @@ namespace esphome {
 
         case State::SEND_TARIFFS_CMD:
           write_array(this->tariffs_, 7);
-          flush();
 
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
 
-          delay(100);
+          delay(300);
           break;
 
         case State::WAIT_TARIFFS_INFO:
