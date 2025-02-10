@@ -90,7 +90,7 @@ namespace esphome {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
-
+          }
           if (this->counter_ >= 23) {
             this->state_ = State::SEND_TARIFFS_CMD;
             this->publish();
@@ -115,7 +115,7 @@ namespace esphome {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
-
+          }
           if (this->counter_ >= 23) {
             this->state_ = State::IDLE;
             this->publish();
