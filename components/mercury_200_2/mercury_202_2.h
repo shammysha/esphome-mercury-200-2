@@ -51,4 +51,5 @@ namespace esphome {
 
         void set_step();
     };
-  }}
+  }
+}
