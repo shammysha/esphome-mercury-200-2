@@ -71,14 +71,14 @@ namespace mercury_202_2 {
       d = millis();
 
       while(this->available()) {
-        this->Re_buf_[counter] = this->read();
+        this->Re_buf_[this->counter_] = this->read();
         this->counter_++;
       }
     }
   }
 
   void MercuryComponent::update() {
-    counter = 0;
+    this->counter_ = 0;
 
     if (step == 0) {
       this->main_uart_read(this->tarif_);
