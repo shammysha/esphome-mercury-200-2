@@ -79,9 +79,11 @@ namespace esphome {
           break;
 
         case State::WAIT_METRICS_INFO:
-          while(this->available()) {
+          int available = this->available();
+          while(available) {
             this->buf_[this->counter_] = this->read();
             this->counter_++;
+            available--;
           }
 
           if (this->counter_ >= 23) {
@@ -98,9 +100,11 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          while(this->available()) {
+          int available = this->available();
+          while(available) {
             this->buf_[this->counter_] = this->read();
             this->counter_++;
+            available--;
           }
 
           if (this->counter_ >= 14) {
