@@ -42,8 +42,8 @@ namespace esphome {
         unsigned char tarif_[7]; // Байты на получение тарифа
 
         uint8_t Re_buf_[100];
-        int counter_{0};
-        int step_{0};
+        uint8_t counter_{0};
+        uint8_t step_{0};
 
         void calculateParams(unsigned char *frame, unsigned char comm);
 

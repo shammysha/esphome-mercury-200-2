@@ -1,4 +1,4 @@
-#include "./mercury_202_2.h"
+#include "mercury_202_2.h"
 #include "esphome/core/log.h"
 
 namespace esphome {
