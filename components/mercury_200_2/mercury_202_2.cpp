@@ -178,4 +178,5 @@ namespace esphome {
 
       this->state_ = State::SEND_METRICS_CMD;
     }
-
+  }
+}
