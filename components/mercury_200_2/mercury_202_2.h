@@ -18,6 +18,8 @@ namespace esphome {
 
     class MercuryComponent : public PollingComponent, public uart::UARTDevice {
       public:
+        MercuryComponent();
+
         void setup() override;
         void dump_config() override;
         void update() override;

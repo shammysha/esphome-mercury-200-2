@@ -43,6 +43,8 @@ namespace esphome {
       return crc;
     }
 
+    MercuryComponent::MercuryComponent() {}
+
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
