@@ -3,57 +3,94 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import sensor
 from esphome.const import (
-    CONF_TYPE
+    DEVICE_CLASS_POWER,
+    DEVICE_CLASS_CURRENT,
+    DEVICE_CLASS_VOLTAGE,
+    CONF_POWER,
+    CONF_CURRENT,
+    CONF_VOLTAGE,
+    CONF_TOTAL
 )
+
 from . import (
     MercuryComponent,
     mercury_200_2_ns,
     CONF_MERCURY_ID
 )
+from homeassistant.components.sensor.device_trigger import CONF_ENERGY
+from homeassistant.const import DEVICE_CLASS_POWER
 
 AUTO_LOAD = ["mercury_200_2"]
 
-POWER_STR = "POWER"
-CURRENT_STR = "CURRENT"
-VOLTAGE_STR = "VOLTAGE"
-TARIFF1_STR = "TARIFF1"
-TARIFF2_STR = "TARIFF2"
-TARIFF3_STR = "TARIFF3"
-TOTAL_STR = "TOTAL"
+CONF_TARIFFS = [f"tariffg{x}" for x in range(1, 3)]
 
+ICON_POWER = "mdi:flash"
+ICON_CURRENT = "mdi:current-ac"
+ICON_VOLTAGE = "mdi:sine-wave"
+ICON_TARIFF = "mdi:lightning-bolt"
 
-MercurySensor = mercury_200_2_ns.class_("MercurySensor", sensor.Sensor)
+ICON_TRANSMISSION = "mdi:swap-horizontal"
+ICON_CONNECTION = "mdi:lan-connect"
+ICON_SESSION = "mdi:sync"
 
-CONFIG_SCHEMA = cv.All(
-    sensor.sensor_schema(
-        MercurySensor,
-    ).extend(
-        {
-            cv.GenerateID(CONF_MERCURY_ID): cv.use_id(MercuryComponent),
-            cv.Required(CONF_TYPE): cv.Any(POWER_STR, CURRENT_STR, VOLTAGE_STR, TARIFF1_STR, TARIFF2_STR, TARIFF3_STR, TOTAL_STR)
-        }
-    )
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(CONF_MERCURY_ID): cv.use_id(MercuryComponent),
+        cv.Optional(CONF_POWER): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_POWER,
+            icon=ICON_POWER,
+        ),
+        cv.Optional(CONF_CURRENT): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_CURRENT,
+            icon=ICON_CURRENT,
+        ),
+        cv.Optional(CONF_VOLTAGE): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_VOLTAGE,
+            icon=ICON_VOLTAGE,
+        ),        
+        cv.Optional(CONF_TOTAL): sensor.sensor_schema(
+            icon=ICON_TARIFF,
+        ),        
+    }
 )
 
+for i in CONF_TARIFFS:
+    CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
+        cv.Schema({
+            cv.Optional(i): sensor.sensor_schema( 
+                icon=ICON_TARIFF 
+            )
+        })
+    )
 
 async def to_code(config):
-    component = await cg.get_variable(config[CONF_MERCURY_ID])
-    var = await sensor.new_sensor(config)
-    
-    if config[CONF_TYPE] == POWER_STR:
-        cg.add(component.register_power_sensor(var))
-    if config[CONF_TYPE] == CURRENT_STR:
-        cg.add(component.register_current_sensor(var))
-    if config[CONF_TYPE] == VOLTAGE_STR:
-        cg.add(component.register_voltage_sensor(var))
-    if config[CONF_TYPE] == TARIFF1_STR:
-        cg.add(component.register_tariff1_sensor(var))
-    if config[CONF_TYPE] == TARIFF2_STR:
-        cg.add(component.register_tariff2_sensor(var))
-    if config[CONF_TYPE] == TARIFF3_STR:
-        cg.add(component.register_tariff3_sensor(var))
-    if config[CONF_TYPE] == TOTAL_STR:
-        cg.add(component.register_total_sensor(var))
+    meter = await cg.get_variable(config[CONF_MERCURY_ID])
 
+    if conf := config.get(CONF_POWER):
+        sensor = await sensor.new_sensor(config[CONF_POWER])
+        cg.add(meter.set_power_sensor(sensor))
+
+    if conf := config.get(CONF_CURRENT):
+        sensor = await sensor.new_sensor(config[CONF_CURRENT])
+        cg.add(meter.set_current_sensor(sensor))
         
+    if conf := config.get(CONF_VOLTAGE):
+        sensor = await sensor.new_sensor(config[CONF_VOLTAGE])
+        cg.add(meter.set_voltage_sensor(sensor))       
         
+    if conf := config.get(CONF_TOTAL):
+        sensor = await sensor.new_sensor(config[CONF_TOTAL])
+        cg.add(meter.set_total_sensor(sensor))  
+        
+    if conf := config.get(CONF_TARIFFS[0]):
+        sensor = await sensor.new_sensor(config[CONF_TARIFFS[0]])
+        cg.add(meter.set_tariff1_sensor(sensor))          
+    
+    if conf := config.get(CONF_TARIFFS[1]):
+        sensor = await sensor.new_sensor(config[CONF_TARIFFS[1]])
+        cg.add(meter.set_tariff2_sensor(sensor))
+
+    if conf := config.get(CONF_TARIFFS[2]):
+        sensor = await sensor.new_sensor(config[CONF_TARIFFS[2]])
+        cg.add(meter.set_tariff3_sensor(sensor))                
+                

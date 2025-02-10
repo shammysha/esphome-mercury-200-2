@@ -3,18 +3,18 @@
 namespace esphome {
 namespace mercury_202_2 {
 
-  long MercuryComponent::pow(long a, int s) {
+  long pow(long a, int s) {
     long out = 1;
     for (int i = 0; i < s; i++)
       out *= a;
     return out;
   }
 
-  template<size_t N = 2> long MercuryComponent::readLong(uchar *inp) {
+  template<size_t N = 2> long readLong(unsigned char *inp) {
     long out = 0;
 
     for (int i = 0; i < N; i++) {
-      uchar v = inp[i];
+      unsigned char v = inp[i];
       int p = pow(10, ((N - 1) - i) * 2);
       out += (((v >> 4) & 15) * 10 + (v & 15)) * p;
     }
@@ -22,11 +22,11 @@ namespace mercury_202_2 {
     return out;
   }
 
-  template<size_t N = 2> double MercuryComponent::readDouble(uchar *inp, int del) {
+  template<size_t N = 2> double readDouble(unsigned char *inp, int del) {
     return (double) this->readLong<N>(inp) / del;
   }
 
-  uint16_t MercuryComponent::crc16(const uint8_t *data, uint8_t len) {
+  uint16_t crc16(const uint8_t *data, uint8_t len) {
     uint16_t crc = 0xFFFF;
     while (len--) {
       crc ^= *data++;
@@ -94,13 +94,17 @@ namespace mercury_202_2 {
       double A = this->readDouble(&this->Re_buf[7], 100); // Парсинг байтов  и перевод в нормальные значения
       double W = this->readDouble<3>(&this->Re_buf[9], 1000); // Парсинг байтов  и перевод в нормальные значения
 
-      if (this->voltage_ != nullptr)
-        this->voltage_->publish_state(V); // Отправка в как сенсор
-      if (this->current_ != nullptr)
-        this->current_->publish_state(A);
-      if (this->power_ != nullptr)
-        this->power_->publish_state(W);
-
+#ifdef USE_SENSOR
+      if (this->power_sensor_) {
+        this->power_sensor_->publish_state(W);
+      }
+      if (this->current_sensor_) {
+        this->current_sensor_->publish_state(A);
+      }
+      if (this->voltage_sensor_) {
+        this->voltage_sensor_->publish_state(V);
+      }
+#endif
     }
 
     if (this->Re_buf[0] == 0x00 && this->Re_buf[4] == 0x27) {
@@ -109,15 +113,20 @@ namespace mercury_202_2 {
       double T3 = this->readDouble<4>(&this->Re_buf[13], 100);
       double sum = T1 + T2 + T3;
 
-      if (this->tariff1_ != nullptr)
-        this->tariff1_->publish_state(T1);
-      if (this->tariff2_ != nullptr)
-        this->tariff2_->publish_state(T2);
-      if (this->tariff3_ != nullptr)
-        this->tariff3_->publish_state(T3);
-      if (this->total_ != nullptr)
-        this->total_->publish_state(sum);
-
+#ifdef USE_SENSOR
+      if (this->tariff1_sensor_) {
+        this->tariff1_sensor_->publish_state(T1);
+      }
+      if (this->tariff2_sensor_) {
+        this->tariff2_sensor_->publish_state(T2);
+      }
+      if (this->tariff3_sensor_) {
+        this->tariff3_sensor_->publish_state(T3);
+      }
+      if (this->total_sensor_) {
+        this->total_sensor_->publish_state(sum);
+      }
+#endif
     }
 
     this->set_step();
