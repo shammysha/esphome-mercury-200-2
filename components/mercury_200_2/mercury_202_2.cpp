@@ -73,16 +73,19 @@ namespace esphome {
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
-          this->flush();
+
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
+
+          delay(100);
           break;
 
         case State::WAIT_METRICS_INFO:
-          while(available) {
-            this->buf_[this->counter_] = this->read();
-            this->counter_++;
-            available--;
+          if (available > 0) {
+            size_t len = std::min(available, 23);
+
+            this->read_array(this->buf_, len);
+            this->counter_+= len;
           }
 
           if (this->counter_ >= 23) {
@@ -93,16 +96,18 @@ namespace esphome {
 
         case State::SEND_TARIFFS_CMD:
           this->write_array(this->tariffs_, 7);
-          this->flush();
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
+
+          delay(100);
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          while(available) {
-            this->buf_[this->counter_] = this->read();
-            this->counter_++;
-            available--;
+          if (available > 0) {
+            size_t len = std::min(available, 14);
+
+            this->read_array(this->buf_, len);
+            this->counter_+= len;
           }
 
           if (this->counter_ >= 14) {
