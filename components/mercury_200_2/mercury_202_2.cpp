@@ -101,9 +101,9 @@ namespace esphome {
 
       if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x63) {
 
-        double V = this->readDouble(&this->Re_buf_[5], 10); //  Парсинг байтов и перевод в нормальные значения
-        double A = this->readDouble(&this->Re_buf_[7], 100); // Парсинг байтов  и перевод в нормальные значения
-        double W = this->readDouble<3>(&this->Re_buf_[9], 1000); // Парсинг байтов  и перевод в нормальные значения
+        double V = readDouble(&this->Re_buf_[5], 10); //  Парсинг байтов и перевод в нормальные значения
+        double A = readDouble(&this->Re_buf_[7], 100); // Парсинг байтов  и перевод в нормальные значения
+        double W = readDouble<3>(&this->Re_buf_[9], 1000); // Парсинг байтов  и перевод в нормальные значения
 
 #ifdef USE_SENSOR
         if (this->power_sensor_) {
@@ -119,9 +119,9 @@ namespace esphome {
       }
 
       if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x27) {
-        double T1 = this->readDouble<4>(&this->Re_buf_[5], 100);
-        double T2 = this->readDouble<4>(&this->Re_buf_[9], 100);
-        double T3 = this->readDouble<4>(&this->Re_buf_[13], 100);
+        double T1 = readDouble<4>(&this->Re_buf_[5], 100);
+        double T2 = readDouble<4>(&this->Re_buf_[9], 100);
+        double T3 = readDouble<4>(&this->Re_buf_[13], 100);
         double sum = T1 + T2 + T3;
 
 #ifdef USE_SENSOR
