@@ -67,6 +67,8 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
+      int available = this->available();
+
       switch (this->state_) {
         case State::IDLE:
           return;
@@ -79,7 +81,6 @@ namespace esphome {
           break;
 
         case State::WAIT_METRICS_INFO:
-          int available = this->available();
           while(available) {
             this->buf_[this->counter_] = this->read();
             this->counter_++;
@@ -100,7 +101,6 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          int available = this->available();
           while(available) {
             this->buf_[this->counter_] = this->read();
             this->counter_++;
