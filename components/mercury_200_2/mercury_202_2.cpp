@@ -46,7 +46,6 @@ namespace esphome {
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
-      this->starttime_ = millis();
     }
 
     void MercuryComponent::dump_config() {
@@ -71,6 +70,10 @@ namespace esphome {
       /*
       if (!this->is_ready()) {
         return;
+      }
+
+      if (!this->starttime) {
+        this->starttime_ = millis();
       }
 
       unsigned long start = millis();
