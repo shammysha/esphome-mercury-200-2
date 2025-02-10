@@ -17,8 +17,6 @@ namespace esphome {
 
     uint16_t crc16(const uint8_t *data, uint8_t len);
 
-    class MercurySensor : public sensor::Sensor {};
-
     class MercuryComponent : public PollingComponent, public uart::UARTDevice {
       public:
         void setup() override;

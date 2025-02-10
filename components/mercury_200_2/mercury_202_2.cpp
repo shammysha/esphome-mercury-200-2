@@ -53,7 +53,7 @@ namespace mercury_202_2 {
     frame[6] = crc >> 8;
   }
 
-  void MercuryComponent::setup() override {
+  void MercuryComponent::setup() {
     this->calculateParams(this->electrical_parameters, 0x63);
     this->calculateParams(this->tarif, 0x27);
   }
@@ -77,7 +77,7 @@ namespace mercury_202_2 {
     }
   }
 
-  void MercuryComponent::update() override {
+  void MercuryComponent::update() {
     counter = 0;
 
     if (step == 0) {
