@@ -79,7 +79,7 @@ namespace esphome {
 
       switch (this->state_) {
         case State::NOT_READY: {
-          if (currenttime > this->starttime_ + this->delay_) {
+          if (start > this->starttime_ + this->delay_) {
             this->state_ = State::IDLE;
           }
         } break;
