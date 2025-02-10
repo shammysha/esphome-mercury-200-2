@@ -70,7 +70,6 @@ namespace esphome {
     void MercuryComponent::loop() {
       int available = this->available();
 
-      /*
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
@@ -115,7 +114,6 @@ namespace esphome {
         default:
           break;
       }
-      */
     }
 
     void MercuryComponent::publish() {
