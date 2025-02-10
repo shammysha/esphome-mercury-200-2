@@ -19,9 +19,12 @@ namespace esphome {
 
     class MercuryComponent : public PollingComponent, public uart::UARTDevice {
       public:
+        MercuryComponent();
+
         void setup() override;
         void dump_config() override;
         void update() override;
+        void loop() override;
 
         void set_address(int address) { this->address_ = address; }
 
