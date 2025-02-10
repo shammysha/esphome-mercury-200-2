@@ -21,7 +21,7 @@ from . import (
 
 AUTO_LOAD = ["mercury_200_2"]
 
-CONF_TARIFFS = [f"tariffg{x}" for x in range(1, 3)]
+CONF_TARIFFS = [f"tariff{x}" for x in range(1, 3)]
 
 ICON_POWER = "mdi:flash"
 ICON_CURRENT = "mdi:current-ac"
