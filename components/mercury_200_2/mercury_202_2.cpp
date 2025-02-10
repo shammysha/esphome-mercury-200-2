@@ -90,13 +90,14 @@ namespace esphome {
           break;
 
         case State::WAIT_METRICS_INFO:
-          while (d >= start && d < start + 300) {
-            d = millis();
+          while(available() > 0) {
+            while (d >= start && d < start + 300) {
+              d = millis();
 
-            while(available() > 0) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
+            return;
           }
           if (this->counter_ >= 23) {
             this->state_ = State::SEND_TARIFFS_CMD;
@@ -115,14 +116,16 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          while (d >= start && d < start + 300) {
-            d = millis();
+          while(available() > 0) {
+            while (d >= start && d < start + 300) {
+              d = millis();
 
-            while(available() > 0) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
+            return;
           }
+
           if (this->counter_ >= 23) {
             this->state_ = State::IDLE;
             this->publish();
