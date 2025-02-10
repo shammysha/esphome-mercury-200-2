@@ -67,7 +67,6 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
-      /*
       if (!this->is_ready()) {
         return;
       }
@@ -140,7 +139,6 @@ namespace esphome {
         default:
           break;
       }
-      */
     }
 
     void MercuryComponent::publish() {

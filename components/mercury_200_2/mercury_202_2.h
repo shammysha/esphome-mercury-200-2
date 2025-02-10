@@ -2,7 +2,10 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/uart/uart.h"
+
+#ifdef USE_SENSOR
 #include "esphome/components/sensor/sensor.h"
+#endif
 
 static const char *TAG = "mercury_200_2";
 
