@@ -80,12 +80,14 @@ namespace mercury_202_2 {
   void MercuryComponent::update() {
     this->counter_ = 0;
 
-    if (step == 0) {
-      this->main_uart_read(this->tarif_);
+    switch (this->step_) {
+      case 0:
+        this->main_uart_read(this->tarif_);
+        break;
 
-    } else if (step == 1) {
-      this->main_uart_read(this->electrical_parameters_);
-
+      case 1: } else if (this->step_== 1) {
+        this->main_uart_read(this->electrical_parameters_);
+        break;
     }
 
     if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x63) {
