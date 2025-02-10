@@ -81,7 +81,7 @@ namespace esphome {
           break;
 
         case State::WAIT_METRICS_INFO:
-          if (!this->check_read_timeout_(23)) {
+          if (!this->check_read_timeout(23)) {
             break;
           }
 
@@ -101,7 +101,7 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          if (!this->check_read_timeout_(14)) {
+          if (!this->check_read_timeout(14)) {
             break;
           }
 
