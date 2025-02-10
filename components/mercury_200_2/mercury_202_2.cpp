@@ -77,6 +77,8 @@ namespace esphome {
         this->starttime_ = millis();
       }
 
+      auto count_available = available();
+
       switch (this->state_) {
 
         case State::NOT_READY: {
@@ -87,7 +89,6 @@ namespace esphome {
 
         case State::SEND_METRICS_CMD: {
           write_array(this->metrics_, 7);
-          flush();
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
@@ -96,7 +97,7 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-          while(available() > 0) {
+          while(count_available-- > 0) {
             while (d < start + 300) {
               d = millis();
 
@@ -113,15 +114,13 @@ namespace esphome {
 
         case State::SEND_TARIFFS_CMD: {
           write_array(this->tariffs_, 7);
-          flush();
+
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
-
-          delay(300);
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
-          while(available() > 0) {
+          while(count_available-- > 0) {
             while (d < start + 300) {
               d = millis();
 
