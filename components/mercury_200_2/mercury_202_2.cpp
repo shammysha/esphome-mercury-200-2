@@ -70,7 +70,7 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
-      if (!this->ready()) {
+      if (!this->is_ready()) {
         return;
       }
 
