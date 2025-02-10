@@ -39,12 +39,13 @@ namespace esphome {
 
       protected:
         enum class State : uint8_t {
+          NOT_READY,
           IDLE,
           SEND_METRICS_CMD,
           WAIT_METRICS_INFO,
           SEND_TARIFFS_CMD,
           WAIT_TARIFFS_INFO
-        } state_{State::IDLE};
+        } state_{State::NOT_READY};
 
       private:
         int address_;

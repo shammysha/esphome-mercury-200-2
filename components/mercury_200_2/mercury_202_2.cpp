@@ -43,7 +43,7 @@ namespace esphome {
       return crc;
     }
 
-    MercuryComponent::MercuryComponent(60000) {}
+    MercuryComponent::MercuryComponent() {}
 
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
@@ -78,16 +78,22 @@ namespace esphome {
       unsigned long d = start;
 
       switch (this->state_) {
-        case State::SEND_METRICS_CMD:
+        case State::NOT_READY: {
+          if (currenttime > this->starttime_ + this->delay_) {
+            this->state_ = State::IDLE;
+          }
+        } break;
+
+        case State::SEND_METRICS_CMD: {
           write_array(this->metrics_, 7);
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
 
           delay(300);
-          break;
+        } break;
 
-        case State::WAIT_METRICS_INFO:
+        case State::WAIT_METRICS_INFO: {
           while(available() > 0) {
             while (d < start + 3000) {
               d = millis();
@@ -101,18 +107,18 @@ namespace esphome {
             this->state_ = State::SEND_TARIFFS_CMD;
             this->publish();
           }
-          break;
+        } break;
 
-        case State::SEND_TARIFFS_CMD:
+        case State::SEND_TARIFFS_CMD: {
           write_array(this->tariffs_, 7);
 
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
 
           delay(300);
-          break;
+        } break;
 
-        case State::WAIT_TARIFFS_INFO:
+        case State::WAIT_TARIFFS_INFO: {
           while(available() > 0) {
             while (d < start + 3000) {
               d = millis();
@@ -127,7 +133,7 @@ namespace esphome {
             this->state_ = State::IDLE;
             this->publish();
           }
-          break;
+        } break;
 
         default:
           break;
@@ -179,12 +185,13 @@ namespace esphome {
     }
 
     void MercuryComponent::update() {
-      int currenttime = millis();
-      if (currenttime < this->starttime_ + this->delay_) { return; };
-
-      if (available() <= 0) {
-        this->state_ = State::SEND_METRICS_CMD;
+      if (this->state_ != State::IDLE) {
+        ESP_LOGD(TAG, "Starting data collection impossible - component not ready");
+        return;
       }
+      ESP_LOGD(TAG, "Starting data collection");
+
+      this->state_ = State::SEND_METRICS_CMD;
     }
   }
 }
