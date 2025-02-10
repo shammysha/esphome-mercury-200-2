@@ -59,5 +59,6 @@ namespace esphome {
 
         void calculateParams(unsigned char *frame, unsigned char comm);
         void publish();
+    };
   }
 }
