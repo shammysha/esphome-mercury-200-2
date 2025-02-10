@@ -86,7 +86,7 @@ namespace esphome {
           while (d >= start && d < start + 100) {
             d = millis();
 
-            while(this->available()) {
+            while(available()) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
@@ -111,7 +111,7 @@ namespace esphome {
           while (d >= start && d < start + 100) {
             d = millis();
 
-            while(this->available()) {
+            while(available()) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
