@@ -74,7 +74,6 @@ namespace esphome {
         return;
       }
 
-
       unsigned long start = millis();
       unsigned long d = start;
 
@@ -91,7 +90,7 @@ namespace esphome {
 
         case State::WAIT_METRICS_INFO:
           while(available() > 0) {
-            while (d >= start && d < start + 300) {
+            while (d < start + 3000) {
               d = millis();
 
               this->buf_[this->counter_] = read();
@@ -117,7 +116,7 @@ namespace esphome {
 
         case State::WAIT_TARIFFS_INFO:
           while(available() > 0) {
-            while (d >= start && d < start + 300) {
+            while (d < start + 3000) {
               d = millis();
 
               this->buf_[this->counter_] = read();
