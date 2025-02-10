@@ -17,8 +17,7 @@ from . import (
     mercury_200_2_ns,
     CONF_MERCURY_ID
 )
-from homeassistant.components.sensor.device_trigger import CONF_ENERGY
-from homeassistant.const import DEVICE_CLASS_POWER
+
 
 AUTO_LOAD = ["mercury_200_2"]
 
