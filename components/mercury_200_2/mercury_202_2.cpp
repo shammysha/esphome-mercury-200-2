@@ -46,7 +46,7 @@ namespace esphome {
     void MercuryComponent::dump_config() {
       ESP_LOGCONFIG(TAG, "Mercury 200.2:");
       LOG_UPDATE_INTERVAL(this);
-      ESP_LOGCONFIG(TAG, "  Address: %s", this->addreess_);
+      ESP_LOGCONFIG(TAG, "  Address: %s", this->address_);
     }
 
     void MercuryComponent::calculateParams(unsigned char *frame, unsigned char comm) {
