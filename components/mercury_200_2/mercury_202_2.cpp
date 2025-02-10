@@ -64,6 +64,7 @@ namespace esphome {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
       this->state_ = State::IDLE;
+      this->starttime_ = millis();
     }
 
     void MercuryComponent::loop() {
@@ -161,6 +162,9 @@ namespace esphome {
     }
 
     void MercuryComponent::update() {
+      int currenttime = millis();
+      if (currenttime < this->starttime_ + this->delay_) { return; };
+
       this->state_ = State::SEND_METRICS_CMD;
     }
   }

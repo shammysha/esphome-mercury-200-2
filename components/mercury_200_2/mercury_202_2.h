@@ -23,6 +23,7 @@ namespace esphome {
         void update() override;
         void loop() override;
         void set_address(int address) { this->address_ = address; }
+        void set_startup_delay(int delay) { this->delay_ = delay; }
 
 #ifdef USE_SENSOR
         SUB_SENSOR(power)
@@ -45,6 +46,8 @@ namespace esphome {
 
       private:
         int address_;
+        int delay_;
+        int starttime_;
 
         unsigned char metrics_[7]; // Байты на получене мгновенных значений
         unsigned char tariffs_[7]; // Байты на получение тарифа

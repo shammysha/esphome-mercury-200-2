@@ -7,7 +7,8 @@ from esphome.const import (
     CONF_AUTH,
     CONF_PASSWORD,
     CONF_ADDRESS,
-    CONF_UPDATE_INTERVAL
+    CONF_UPDATE_INTERVAL,
+    CONF_STARTUP_DELAY 
 )
 
 CODEOWNERS = ["@Shammysha"]
@@ -19,6 +20,7 @@ DEPENDENCIES = ["uart"]
 CONF_MERCURY_ID = "mercury_200_2_id"
 
 DEFAULTS_UPDATE_INTERVAL = "60s"
+DEFAULTS_STARTUP_DELAY = "10s"
 
 mercury_200_2_ns = cg.esphome_ns.namespace("mercury_200_2")
 MercuryComponent = mercury_200_2_ns.class_("MercuryComponent", cg.PollingComponent, uart.UARTDevice)
@@ -28,7 +30,8 @@ CONFIG_SCHEMA = cv.All(
         {
             cv.GenerateID(): cv.declare_id(MercuryComponent),
             cv.Required(CONF_ADDRESS): cv.Range(min=100000, max=999999),
-            cv.Optional(CONF_UPDATE_INTERVAL, default=DEFAULTS_UPDATE_INTERVAL): cv.update_interval
+            cv.Optional(CONF_UPDATE_INTERVAL, default=DEFAULTS_UPDATE_INTERVAL): cv.update_interval,
+            cv.Optional(CONF_STARTUP_DELAY, default=DEFAULTS_STARTUP_DELAY): cv.positive_time_period_milliseconds
         }
     )
     .extend(cv.polling_component_schema("60s"))    
@@ -42,4 +45,5 @@ async def to_code(config):
         
     cg.add(var.set_address(config[CONF_ADDRESS]))
     cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))    
+    cg.add(var.set_startup_delay(config[CONF_STARTUP_DELAY]))
     
