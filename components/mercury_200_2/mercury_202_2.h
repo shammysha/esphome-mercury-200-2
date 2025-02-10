@@ -21,7 +21,6 @@ namespace esphome {
         void setup() override;
         void dump_config() override;
         void update() override;
-        void loop() override;
 
         void set_address(int address) { this->address_ = address; }
 

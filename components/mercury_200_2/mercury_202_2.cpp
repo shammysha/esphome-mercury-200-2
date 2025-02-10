@@ -60,10 +60,6 @@ namespace esphome {
       frame[6] = crc >> 8;
     }
 
-    void MercuryComponent::loop() {
-
-    }
-
     void MercuryComponent::setup() {
       this->calculateParams(this->electrical_parameters_, 0x63);
       this->calculateParams(this->tarif_, 0x27);
