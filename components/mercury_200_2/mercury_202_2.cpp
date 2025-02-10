@@ -23,7 +23,7 @@ namespace mercury_202_2 {
   }
 
   template<size_t N = 2> double readDouble(unsigned char *inp, int del) {
-    return (double) this->readLong<N>(inp) / del;
+    return (double) readLong<N>(inp) / del;
   }
 
   uint16_t crc16(const uint8_t *data, uint8_t len) {
