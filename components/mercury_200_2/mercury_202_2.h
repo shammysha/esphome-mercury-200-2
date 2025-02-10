@@ -43,13 +43,13 @@ namespace esphome {
         unsigned char electrical_parameters_[7]; // Байты на получене мгновенных значений
         unsigned char tarif_[7]; // Байты на получение тарифа
 
-        byte Re_buf_[100];
+        uint8_t Re_buf_[100];
         int counter_{0};
         int step_{0};
 
         void calculateParams(unsigned char *frame, unsigned char comm);
 
-        void main_uart_read(byte *command);
+        void main_uart_read(uint8_t *command);
 
         void set_step();
     };

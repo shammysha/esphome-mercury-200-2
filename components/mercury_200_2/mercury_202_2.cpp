@@ -65,7 +65,7 @@ namespace esphome {
       this->calculateParams(this->tarif_, 0x27);
     }
 
-    void MercuryComponent::main_uart_read(byte *command) {
+    void MercuryComponent::main_uart_read(uint8_t *command) {
       unsigned long start = millis();
       unsigned long d = start;
 
