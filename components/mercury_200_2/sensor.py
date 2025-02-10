@@ -66,30 +66,30 @@ async def to_code(config):
     meter = await cg.get_variable(config[CONF_MERCURY_ID])
 
     if conf := config.get(CONF_POWER):
-        sensor = await sensor.new_sensor(config[CONF_POWER])
-        cg.add(meter.set_power_sensor(sensor))
+        s = await sensor.new_sensor(config[CONF_POWER])
+        cg.add(meter.set_power_sensor(s))
 
     if conf := config.get(CONF_CURRENT):
-        sensor = await sensor.new_sensor(config[CONF_CURRENT])
-        cg.add(meter.set_current_sensor(sensor))
+        s = await sensor.new_sensor(config[CONF_CURRENT])
+        cg.add(meter.set_current_sensor(s))
         
     if conf := config.get(CONF_VOLTAGE):
-        sensor = await sensor.new_sensor(config[CONF_VOLTAGE])
-        cg.add(meter.set_voltage_sensor(sensor))       
+        s = await sensor.new_sensor(config[CONF_VOLTAGE])
+        cg.add(meter.set_voltage_sensor(s))       
         
     if conf := config.get(CONF_TOTAL):
-        sensor = await sensor.new_sensor(config[CONF_TOTAL])
-        cg.add(meter.set_total_sensor(sensor))  
+        s = await sensor.new_sensor(config[CONF_TOTAL])
+        cg.add(meter.set_total_sensor(s))  
         
     if conf := config.get(CONF_TARIFFS[0]):
-        sensor = await sensor.new_sensor(config[CONF_TARIFFS[0]])
-        cg.add(meter.set_tariff1_sensor(sensor))          
+        s = await sensor.new_sensor(config[CONF_TARIFFS[0]])
+        cg.add(meter.set_tariff1_sensor(s))          
     
     if conf := config.get(CONF_TARIFFS[1]):
-        sensor = await sensor.new_sensor(config[CONF_TARIFFS[1]])
-        cg.add(meter.set_tariff2_sensor(sensor))
+        s = await sensor.new_sensor(config[CONF_TARIFFS[1]])
+        cg.add(meter.set_tariff2_sensor(s))
 
     if conf := config.get(CONF_TARIFFS[2]):
-        sensor = await sensor.new_sensor(config[CONF_TARIFFS[2]])
-        cg.add(meter.set_tariff3_sensor(sensor))                
+        s = await sensor.new_sensor(config[CONF_TARIFFS[2]])
+        cg.add(meter.set_tariff3_sensor(s))                
                 
