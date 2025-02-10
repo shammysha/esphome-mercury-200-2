@@ -56,7 +56,7 @@ CONFIG_SCHEMA = cv.Schema(
 for i in CONF_TARIFFS:
     CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
         cv.Schema({
-            cv.Optional(CONF_TARIFFS[i]): sensor.sensor_schema( 
+            cv.Optional(i): sensor.sensor_schema( 
                 icon=ICON_TARIFF 
             )
         })
