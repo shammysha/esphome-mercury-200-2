@@ -43,6 +43,13 @@ namespace esphome {
       return crc;
     }
 
+    void MercuryComponent::setup() {
+      this->calculateParams(this->metrics_, 0x63);
+      this->calculateParams(this->tariffs_, 0x27);
+      this->state_ = State::IDLE;
+      this->starttime_ = millis();
+    }
+
     void MercuryComponent::dump_config() {
       ESP_LOGCONFIG(TAG, "Mercury 200.2:");
       LOG_UPDATE_INTERVAL(this);
@@ -60,16 +67,10 @@ namespace esphome {
       frame[6] = crc >> 8;
     }
 
-    void MercuryComponent::setup() {
-      this->calculateParams(this->metrics_, 0x63);
-      this->calculateParams(this->tariffs_, 0x27);
-      this->state_ = State::IDLE;
-      this->starttime_ = millis();
-    }
-
     void MercuryComponent::loop() {
       int available = this->available();
 
+      /*
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
@@ -114,6 +115,7 @@ namespace esphome {
         default:
           break;
       }
+      ^/
     }
 
     void MercuryComponent::publish() {
@@ -164,7 +166,7 @@ namespace esphome {
       int currenttime = millis();
       if (currenttime < this->starttime_ + this->delay_) { return; };
 
-      // this->state_ = State::SEND_METRICS_CMD;
+      this->state_ = State::SEND_METRICS_CMD;
     }
   }
 }
