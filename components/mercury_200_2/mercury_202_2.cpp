@@ -69,10 +69,13 @@ namespace esphome {
 
     void MercuryComponent::loop() {
       int available = this->available();
+      unsigned long start = millis();
+      unsigned long d = start;
 
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
+          this->flush();
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
@@ -80,17 +83,24 @@ namespace esphome {
           break;
 
         case State::WAIT_METRICS_INFO:
-          if (!this->check_read_timeout(23)) {
-            break;
-          }
+          while (d >= start && d < start + 100) {
+            d = millis();
 
-          this->read_array(this->buf_, 23);
-          this->state_ = State::SEND_TARIFFS_CMD;
-          this->publish();
+            while(this->available()) {
+              this->buf_[this->counter_] = read();
+              this->counter_++;
+            }
+
+          if (this->counter_ >= 23) {
+            this->state_ = State::SEND_TARIFFS_CMD;
+            this->publish();
+          }
           break;
 
         case State::SEND_TARIFFS_CMD:
           this->write_array(this->tariffs_, 7);
+          this->flush();
+
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
 
@@ -98,13 +108,18 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          if (!this->check_read_timeout(14)) {
-            break;
-          }
+          while (d >= start && d < start + 100) {
+            d = millis();
 
-          this->read_array(this->buf_, 14);
-          this->state_ = State::IDLE;
-          this->publish();
+            while(this->available()) {
+              this->buf_[this->counter_] = read();
+              this->counter_++;
+            }
+
+          if (this->counter_ >= 23) {
+            this->state_ = State::IDLE;
+            this->publish();
+          }
           break;
 
         default:
