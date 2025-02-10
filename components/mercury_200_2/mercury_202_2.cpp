@@ -134,7 +134,7 @@ namespace esphome {
         this->state_ = State::SEND_METRICS_CMD;
         this->last_updated_ = start;
 
-        ESP_LOGI(TAG, "Starting data collection");
+        ESP_LOGW(TAG, "Starting data collection");
       }
     }
 
