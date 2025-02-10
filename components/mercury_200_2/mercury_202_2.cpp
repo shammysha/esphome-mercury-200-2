@@ -185,6 +185,7 @@ namespace esphome {
     }
 
     void MercuryComponent::update() {
+      flush();
       if (this->state_ != State::IDLE) {
         ESP_LOGD(TAG, "Starting data collection impossible - component not ready");
         return;
