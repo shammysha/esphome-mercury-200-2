@@ -38,12 +38,12 @@ namespace esphome {
       private:
         int address_;
 
-        unsigned char electrical_parameters[7]; // Байты на получене мгновенных значений
-        unsigned char tarif[7]; // Байты на получение тарифа
+        unsigned char electrical_parameters_[7]; // Байты на получене мгновенных значений
+        unsigned char tarif_[7]; // Байты на получение тарифа
 
-        byte Re_buf[100];
-        int counter{0};
-        int step{0};
+        byte Re_buf_[100];
+        int counter_{0};
+        int step_{0};
 
         void calculateParams(unsigned char *frame, unsigned char comm);
 

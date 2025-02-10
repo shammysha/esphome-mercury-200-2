@@ -54,8 +54,8 @@ namespace mercury_202_2 {
   }
 
   void MercuryComponent::setup() {
-    this->calculateParams(this->electrical_parameters, 0x63);
-    this->calculateParams(this->tarif, 0x27);
+    this->calculateParams(this->electrical_parameters_, 0x63);
+    this->calculateParams(this->tarif_, 0x27);
   }
 
   void MercuryComponent::main_uart_read(byte *command) {
@@ -70,9 +70,9 @@ namespace mercury_202_2 {
     while (d >= start && d < start + 3000) {
       d = millis();
 
-      while(available()) {
-        this->Re_buf[counter] = this->read();
-        this->counter++;
+      while(this->available()) {
+        this->Re_buf_[counter] = this->read();
+        this->counter_++;
       }
     }
   }
@@ -81,18 +81,18 @@ namespace mercury_202_2 {
     counter = 0;
 
     if (step == 0) {
-      this->main_uart_read(this->tarif);
+      this->main_uart_read(this->tarif_);
 
     } else if (step == 1) {
-      this->main_uart_read(this->electrical_parameters);
+      this->main_uart_read(this->electrical_parameters_);
 
     }
 
-    if (this->Re_buf[0] == 0x00 && this->Re_buf[4] == 0x63) {
+    if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x63) {
 
-      double V = this->readDouble(&this->Re_buf[5], 10); //  Парсинг байтов и перевод в нормальные значения
-      double A = this->readDouble(&this->Re_buf[7], 100); // Парсинг байтов  и перевод в нормальные значения
-      double W = this->readDouble<3>(&this->Re_buf[9], 1000); // Парсинг байтов  и перевод в нормальные значения
+      double V = this->readDouble(&this->Re_buf_[5], 10); //  Парсинг байтов и перевод в нормальные значения
+      double A = this->readDouble(&this->Re_buf_[7], 100); // Парсинг байтов  и перевод в нормальные значения
+      double W = this->readDouble<3>(&this->Re_buf_[9], 1000); // Парсинг байтов  и перевод в нормальные значения
 
 #ifdef USE_SENSOR
       if (this->power_sensor_) {
@@ -107,10 +107,10 @@ namespace mercury_202_2 {
 #endif
     }
 
-    if (this->Re_buf[0] == 0x00 && this->Re_buf[4] == 0x27) {
-      double T1 = this->readDouble<4>(&this->Re_buf[5], 100);
-      double T2 = this->readDouble<4>(&this->Re_buf[9], 100);
-      double T3 = this->readDouble<4>(&this->Re_buf[13], 100);
+    if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x27) {
+      double T1 = this->readDouble<4>(&this->Re_buf_[5], 100);
+      double T2 = this->readDouble<4>(&this->Re_buf_[9], 100);
+      double T3 = this->readDouble<4>(&this->Re_buf_[13], 100);
       double sum = T1 + T2 + T3;
 
 #ifdef USE_SENSOR
@@ -133,9 +133,9 @@ namespace mercury_202_2 {
   }
 
   void MercuryComponent::set_step() {
-    this->step++;
-    if (this->step >= 2) {
-      this->step = 0;
+    this->step_++;
+    if (this->step_ >= 2) {
+      this->step_ = 0;
     }
   }
 
