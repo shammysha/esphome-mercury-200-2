@@ -70,7 +70,6 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
-      int available = this->available();
       unsigned long start = millis();
       unsigned long d = start;
 
@@ -125,9 +124,6 @@ namespace esphome {
           break;
 
         default:
-          if (available > 0) {
-            this->read_array(this->buf_, 0x32);
-          }
           break;
       }
     }
@@ -183,19 +179,3 @@ namespace esphome {
       this->state_ = State::SEND_METRICS_CMD;
     }
 
-    bool MercuryComponent::check_read_timeout(size_t len) {
-      if (this->available() >= int(len))
-        return true;
-
-      uint32_t start_time = millis();
-      while (this->available() < int(len)) {
-        if (millis() - start_time > 100) {
-          ESP_LOGE(TAG, "Reading from UART timed out at byte %u!", this->available());
-          return false;
-        }
-        yield();
-      }
-      return true;
-    }
-  }
-}

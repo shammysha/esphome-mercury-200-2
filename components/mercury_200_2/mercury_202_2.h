@@ -59,6 +59,5 @@ namespace esphome {
 
         void calculateParams(unsigned char *frame, unsigned char comm);
         void publish();
-        bool check_read_timeout(size_t len);     };
   }
 }
