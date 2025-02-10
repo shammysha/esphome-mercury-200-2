@@ -71,9 +71,6 @@ namespace esphome {
       int available = this->available();
 
       switch (this->state_) {
-        case State::IDLE:
-          return;
-
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
           this->flush();
@@ -114,6 +111,8 @@ namespace esphome {
           }
           break;
 
+        default:
+          break;
       }
     }
 
