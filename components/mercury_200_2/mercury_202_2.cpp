@@ -73,6 +73,7 @@ namespace esphome {
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
           this->write_array(this->metrics_, 7);
+          this->flush();
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
@@ -96,6 +97,8 @@ namespace esphome {
 
         case State::SEND_TARIFFS_CMD:
           this->write_array(this->tariffs_, 7);
+          this->flush();
+
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
 
