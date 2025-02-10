@@ -2,7 +2,7 @@
 #include "esphome/core/log.h"
 
 namespace esphome {
-  namespace mercury_202_2 {
+  namespace mercury_200_2 {
 
     long pow(long a, int s) {
       long out = 1;
