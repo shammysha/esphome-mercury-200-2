@@ -25,7 +25,7 @@ DEFAULTS_UPDATE_INTERVAL = "60s"
 DEFAULTS_STARTUP_DELAY = "10s"
 
 mercury_200_2_ns = cg.esphome_ns.namespace("mercury_200_2")
-MercuryComponent = mercury_200_2_ns.class_("MercuryComponent", cg.PollingComponent, uart.UARTDevice)
+MercuryComponent = mercury_200_2_ns.class_("MercuryComponent", cg.Component, uart.UARTDevice)
 
 CONFIG_SCHEMA = cv.All(
     cv.Schema(
@@ -36,7 +36,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(CONF_STARTUP_DELAY, default=DEFAULTS_STARTUP_DELAY): cv.positive_time_period_milliseconds
         }
     )
-    .extend(cv.polling_component_schema("60s"))    
+    .extend(cv.COMPONENT_SCHEMA)    
     .extend(uart.UART_DEVICE_SCHEMA)           
 )
 

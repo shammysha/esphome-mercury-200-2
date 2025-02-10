@@ -19,14 +19,14 @@ namespace esphome {
 
     uint16_t crc16(const uint8_t *data, uint8_t len);
 
-    class MercuryComponent : public PollingComponent, public uart::UARTDevice {
+    class MercuryComponent : public Component, public uart::UARTDevice {
       public:
         void setup() override;
         void dump_config() override;
-        void update() override;
         void loop() override;
         void set_address(int address) { this->address_ = address; }
         void set_startup_delay(int delay) { this->delay_ = delay; }
+        void set_update_interval(int interval) { this->interval_ = interval; }
 
 #ifdef USE_SENSOR
         SUB_SENSOR(power)
@@ -50,8 +50,10 @@ namespace esphome {
 
       private:
         int address_;
+        int interval_;
         int delay_;
-        int starttime_;
+        unsigned long starttime_;
+        unsigned long last_updated_{0};
 
         unsigned char metrics_[7]; // Байты на получене мгновенных значений
         unsigned char tariffs_[7]; // Байты на получение тарифа

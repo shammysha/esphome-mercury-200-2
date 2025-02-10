@@ -71,17 +71,26 @@ namespace esphome {
         return;
       }
 
+      unsigned long start = millis();
+      unsigned long d = start;
       if (!this->starttime_) {
         this->starttime_ = millis();
       }
 
-      unsigned long start = millis();
-      unsigned long d = start;
-
       switch (this->state_) {
+
         case State::NOT_READY: {
           if (start > this->starttime_ + this->delay_) {
             this->state_ = State::IDLE;
+          }
+        } break;
+
+        case State::IDLE: {
+          if (start > this->last_updated_ + this->interval_) {
+            this->state_ = State::SEND_METRICS_CMD;
+            this->last_updated_ = start;
+
+            ESP_LOGD(TAG, "Starting data collection");
           }
         } break;
 
@@ -182,18 +191,6 @@ namespace esphome {
         }
 #endif
       }
-
-    }
-
-    void MercuryComponent::update() {
-      flush();
-      if (this->state_ != State::IDLE) {
-        ESP_LOGD(TAG, "Starting data collection impossible - component not ready");
-        return;
-      }
-      ESP_LOGD(TAG, "Starting data collection");
-
-      this->state_ = State::SEND_METRICS_CMD;
     }
   }
 }
