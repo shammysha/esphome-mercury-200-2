@@ -78,21 +78,16 @@ namespace esphome {
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
 
-          delay(100);
           break;
 
         case State::WAIT_METRICS_INFO:
-          if (available > 0) {
-            size_t len = std::min(available, 23);
-
-            this->read_array(this->buf_, len);
-            this->counter_+= len;
+          if (!this->check_read_timeout_(23)) {
+            break;
           }
 
-          if (this->counter_ >= 23) {
-            this->publish();
-            this->state_ = State::SEND_TARIFFS_CMD;
-          }
+          this->read_array(this->buf_, 23);
+          this->state_ = State::SEND_TARIFFS_CMD;
+          this->publish();
           break;
 
         case State::SEND_TARIFFS_CMD:
@@ -106,20 +101,19 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          if (available > 0) {
-            size_t len = std::min(available, 14);
-
-            this->read_array(this->buf_, len);
-            this->counter_+= len;
+          if (!this->check_read_timeout_(14)) {
+            break;
           }
 
-          if (this->counter_ >= 14) {
-            this->publish();
-            this->state_ = State::IDLE;
-          }
+          this->read_array(this->buf_, 14);
+          this->state_ = State::IDLE;
+          this->publish();
           break;
 
         default:
+          if (available > 0) {
+            this->read_array(this->buf_, 0x32);
+          }
           break;
       }
     }
