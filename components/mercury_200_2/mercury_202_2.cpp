@@ -80,19 +80,20 @@ namespace esphome {
 
       switch (this->state_) {
         case State::SEND_METRICS_CMD:
-          this->write_array(this->metrics_, 7);
-          this->flush();
+          write_array(this->metrics_, 7);
+          flush();
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
 
+          delay(100);
           break;
 
         case State::WAIT_METRICS_INFO:
-          while (d >= start && d < start + 100) {
+          while (d >= start && d < start + 300) {
             d = millis();
 
-            while(available()) {
+            while(available() > 0) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
@@ -104,8 +105,8 @@ namespace esphome {
           break;
 
         case State::SEND_TARIFFS_CMD:
-          this->write_array(this->tariffs_, 7);
-          this->flush();
+          write_array(this->tariffs_, 7);
+          flush();
 
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
@@ -114,10 +115,10 @@ namespace esphome {
           break;
 
         case State::WAIT_TARIFFS_INFO:
-          while (d >= start && d < start + 100) {
+          while (d >= start && d < start + 300) {
             d = millis();
 
-            while(available()) {
+            while(available() > 0) {
               this->buf_[this->counter_] = read();
               this->counter_++;
             }
@@ -181,7 +182,9 @@ namespace esphome {
       int currenttime = millis();
       if (currenttime < this->starttime_ + this->delay_) { return; };
 
-      this->state_ = State::SEND_METRICS_CMD;
+      if (available <= 0) {
+        this->state_ = State::SEND_METRICS_CMD;
+      }
     }
   }
 }
