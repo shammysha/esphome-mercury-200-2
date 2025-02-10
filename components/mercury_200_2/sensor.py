@@ -21,7 +21,7 @@ from . import (
 
 AUTO_LOAD = ["mercury_200_2"]
 
-CONF_TARIFFS = [f"tariff{x}" for x in range(1, 3)]
+CONF_TARIFFS = [f"tariff{x}" for x in range(1,3)]
 
 ICON_POWER = "mdi:flash"
 ICON_CURRENT = "mdi:current-ac"
@@ -56,7 +56,7 @@ CONFIG_SCHEMA = cv.Schema(
 for i in CONF_TARIFFS:
     CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
         cv.Schema({
-            cv.Optional(i): sensor.sensor_schema( 
+            cv.Optional(CONF_TARIFFS[i]): sensor.sensor_schema( 
                 icon=ICON_TARIFF 
             )
         })
