@@ -140,7 +140,7 @@ namespace esphome {
         default:
           break;
       }
-      if (this->state != State::NOT_READY && start > this->last_updated_ + this->interval_) {
+      if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
         this->state_ = State::SEND_METRICS_CMD;
         this->last_updated_ = start;
 
