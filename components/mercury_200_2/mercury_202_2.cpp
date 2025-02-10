@@ -115,7 +115,7 @@ namespace esphome {
         default:
           break;
       }
-      ^/
+      */
     }
 
     void MercuryComponent::publish() {
