@@ -61,45 +61,63 @@ namespace esphome {
     }
 
     void MercuryComponent::setup() {
-      this->calculateParams(this->electrical_parameters_, 0x63);
-      this->calculateParams(this->tarif_, 0x27);
+      this->calculateParams(this->metrics_, 0x63);
+      this->calculateParams(this->tariffs_, 0x27);
+      this->state_ = State::IDLE;
     }
 
-    void MercuryComponent::main_uart_read(uint8_t *command) {
-      unsigned long start = millis();
-      unsigned long d = start;
+    void MercuryComponent::loop() {
+      switch (this->state_) {
+        case State::IDLE:
+          return;
 
-      this->write_array(command, 7);
-      this->flush();
+        case State::SEND_METRICS_CMD:
+          this->write_array(this->metrics_, 7);
+          this->flush();
+          this->state_ = State::WAIT_METRICS_INFO;
+          this->counter_ = 0;
+          break;
 
-      while (d >= start && d < start + 3000) {
-        d = millis();
+        case State::WAIT_METRICS_INFO:
+          while(this->available()) {
+            this->buf_[this->counter_] = this->read();
+            this->counter_++;
+          }
 
-        while(this->available()) {
-          this->Re_buf_[this->counter_] = this->read();
-          this->counter_++;
-        }
+          if (this->counter >= 23) {
+            this->publish();
+            this->state_ = State::SEND_TARIFFS_CMD;
+          }
+          break;
+
+        case State::SEND_TARIFFS_CMD:
+          this->write_array(this->tariffs_, 7);
+          this->flush();
+          this->state_ = State::WAIT_TARIFFS_INFO;
+          this->counter_ = 0;
+          break;
+
+        case State::WAIT_TARIFFS_INFO:
+          while(this->available()) {
+            this->buf_[this->counter_] = this->read();
+            this->counter_++;
+          }
+
+          if (this->counter >= 14) {
+            this->publish();
+            this->state_ = State::IDLE;
+          }
+          break;
+
       }
     }
 
-    void MercuryComponent::update() {
-      this->counter_ = 0;
+    void MercuryComponent::publish() {
+      if (this->buf_[0] == 0x00 && this->buf_[4] == 0x63) {
 
-      switch (this->step_) {
-        case 0:
-          this->main_uart_read(this->tarif_);
-          break;
-
-        case 1:
-          this->main_uart_read(this->electrical_parameters_);
-          break;
-      }
-
-      if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x63) {
-
-        double V = readDouble(&this->Re_buf_[5], 10); //  Парсинг байтов и перевод в нормальные значения
-        double A = readDouble(&this->Re_buf_[7], 100); // Парсинг байтов  и перевод в нормальные значения
-        double W = readDouble<3>(&this->Re_buf_[9], 1000); // Парсинг байтов  и перевод в нормальные значения
+        double V = readDouble(&this->buf_[5], 10); //  Парсинг байтов и перевод в нормальные значения
+        double A = readDouble(&this->buf_[7], 100); // Парсинг байтов  и перевод в нормальные значения
+        double W = readDouble<3>(&this->buf_[9], 1000); // Парсинг байтов  и перевод в нормальные значения
 
 #ifdef USE_SENSOR
         if (this->power_sensor_) {
@@ -114,10 +132,10 @@ namespace esphome {
 #endif
       }
 
-      if (this->Re_buf_[0] == 0x00 && this->Re_buf_[4] == 0x27) {
-        double T1 = readDouble<4>(&this->Re_buf_[5], 100);
-        double T2 = readDouble<4>(&this->Re_buf_[9], 100);
-        double T3 = readDouble<4>(&this->Re_buf_[13], 100);
+      if (this->buf_[0] == 0x00 && this->buf_[4] == 0x27) {
+        double T1 = readDouble<4>(&this->buf_[5], 100);
+        double T2 = readDouble<4>(&this->buf_[9], 100);
+        double T3 = readDouble<4>(&this->buf_[13], 100);
         double sum = T1 + T2 + T3;
 
 #ifdef USE_SENSOR
@@ -136,15 +154,10 @@ namespace esphome {
 #endif
       }
 
-      this->set_step();
     }
 
-    void MercuryComponent::set_step() {
-      this->step_++;
-      if (this->step_ >= 2) {
-        this->step_ = 0;
-      }
+    void MercuryComponent::update() {
+      this->state_ = State::SEND_METRICS_CMD;
     }
-
   }
 }

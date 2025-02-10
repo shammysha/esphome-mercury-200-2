@@ -21,7 +21,7 @@ namespace esphome {
         void setup() override;
         void dump_config() override;
         void update() override;
-
+        void loop() override;
         void set_address(int address) { this->address_ = address; }
 
 #ifdef USE_SENSOR
@@ -34,21 +34,26 @@ namespace esphome {
         SUB_SENSOR(total)
 #endif
 
+      protected:
+        enum class State : uint8_t {
+          IDLE,
+          SEND_METRICS_CMD,
+          WAIT_METRICS_INFO,
+          SEND_TARIFFS_CMD,
+          WAIT_TARIFFS_INFO
+        } state_{State::IDLE};
+
       private:
         int address_;
 
-        unsigned char electrical_parameters_[7]; // Байты на получене мгновенных значений
-        unsigned char tarif_[7]; // Байты на получение тарифа
+        unsigned char metrics_[7]; // Байты на получене мгновенных значений
+        unsigned char tariffs_[7]; // Байты на получение тарифа
 
-        uint8_t Re_buf_[100];
+        uint8_t buf_[100];
         uint8_t counter_{0};
-        uint8_t step_{0};
 
         void calculateParams(unsigned char *frame, unsigned char comm);
-
-        void main_uart_read(uint8_t *command);
-
-        void set_step();
+        void publish();
     };
   }
 }
