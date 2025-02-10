@@ -1,4 +1,6 @@
 #include "mercury_202_2.h"
+#include "esphome/core/log.h"
+#include "esphome/core/hal.h"
 
 namespace esphome {
 namespace mercury_202_2 {
@@ -42,6 +44,12 @@ namespace mercury_202_2 {
     return crc;
   }
 
+  void MercuryComponent::dump_config() {
+    ESP_LOGCONFIG(TAG, "Mercury 200.2:");
+    LOG_UPDATE_INTERVAL(this);
+    ESP_LOGCONFIG(TAG, "  Address: %s", this->addreess_);
+  }
+
   void MercuryComponent::calculateParams(unsigned char *frame, unsigned char comm) {
     frame[0] = 0x00;
     frame[1] = this->address_ >> 16;
@@ -64,8 +72,6 @@ namespace mercury_202_2 {
 
     this->write_array(command, 7);
     this->flush();
-
-  //    digitalWrite(0, LOW);
 
     while (d >= start && d < start + 3000) {
       d = millis();
