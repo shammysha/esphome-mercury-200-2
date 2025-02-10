@@ -70,6 +70,11 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
+      if (!this->ready()) {
+        return;
+      }
+
+
       unsigned long start = millis();
       unsigned long d = start;
 
