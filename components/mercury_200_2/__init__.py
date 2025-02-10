@@ -15,6 +15,8 @@ CODEOWNERS = ["@Shammysha"]
 
 AUTO_LOAD = ["sensor"]
 
+MULTI_CONF = True
+
 DEPENDENCIES = ["uart"]
 
 CONF_MERCURY_ID = "mercury_200_2_id"
