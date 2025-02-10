@@ -71,7 +71,7 @@ namespace esphome {
         return;
       }
 
-      if (!this->starttime) {
+      if (!this->starttime_) {
         this->starttime_ = millis();
       }
 
