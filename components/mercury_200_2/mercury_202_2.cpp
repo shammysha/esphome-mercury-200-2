@@ -43,7 +43,7 @@ namespace esphome {
       return crc;
     }
 
-    MercuryComponent::MercuryComponent() {}
+    MercuryComponent::MercuryComponent("60s") {}
 
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
