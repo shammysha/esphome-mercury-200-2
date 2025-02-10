@@ -43,19 +43,16 @@ namespace esphome {
       return crc;
     }
 
-    MercuryComponent::MercuryComponent() {}
-
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
-      this->state_ = State::IDLE;
       this->starttime_ = millis();
     }
 
     void MercuryComponent::dump_config() {
-      ESP_LOGCONFIG(TAG, "Mercury 200.2:");
-      LOG_UPDATE_INTERVAL(this);
-      ESP_LOGCONFIG(TAG, "  Address: %s", this->address_);
+      //ESP_LOGCONFIG(TAG, "Mercury 200.2:");
+      //LOG_UPDATE_INTERVAL(this);
+      //ESP_LOGCONFIG(TAG, "  Address: %s", this->address_);
     }
 
     void MercuryComponent::calculateParams(unsigned char *frame, unsigned char comm) {
