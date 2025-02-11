@@ -79,6 +79,8 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
+      delay(5);
+
       if (!this->is_ready()) {
         return;
       }
@@ -105,7 +107,6 @@ namespace esphome {
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
 
-          delay(300);
         } break;
 
         case State::WAIT_METRICS_INFO: {
