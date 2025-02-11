@@ -1,6 +1,7 @@
 #include "mercury_202_2.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
+#include "esphome/core/hal.h"
 
 namespace esphome {
   namespace mercury_200_2 {
@@ -49,14 +50,20 @@ namespace esphome {
       this->calculateParams(this->tariffs_, 0x27);
 
       ESP_LOGW(TAG, "Metrics CMD: %s", format_hex_pretty(this->metrics_, 7).c_str());
+      delay(10);
       ESP_LOGW(TAG, "Tariffs CMD: %s", format_hex_pretty(this->tariffs_, 7).c_str());
+      delay(10);
     }
 
     void MercuryComponent::dump_config() {
       ESP_LOGCONFIG(TAG, "Mercury 200.2:");
+      delay(10);
       ESP_LOGCONFIG(TAG, "  Address: %s", this->address_);
+      delay(10);
       ESP_LOGCONFIG(TAG, "  Startup delay: %s", this->delay_);
+      delay(10);
       ESP_LOGCONFIG(TAG, "  Update interval: %s", this->interval_);
+      delay(10);
     }
 
     void MercuryComponent::calculateParams(unsigned char *frame, unsigned char comm) {
@@ -107,11 +114,15 @@ namespace esphome {
 
           if (this->counter_ >= 14) {
             ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
+            delay(10);
+
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
 
           } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
+            delay(10);
+
             this->next_state(State::IDLE);
           }
 
@@ -131,6 +142,7 @@ namespace esphome {
             d = millis();
           }
           ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
+          delay(10);
 
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
@@ -138,6 +150,8 @@ namespace esphome {
 
           } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (%d + %d > %d)!", this->awaiting_, this->timeout_, millis());
+            delay(10);
+
             this->next_state(State::IDLE);
           }
 
@@ -152,6 +166,7 @@ namespace esphome {
         this->last_updated_ = start;
 
         ESP_LOGW(TAG, "Starting data collection");
+        delay(10);
       }
     }
 
@@ -201,6 +216,7 @@ namespace esphome {
     void MercuryComponent::next_state(State state) {
       this->state_ = state;
       ESP_LOGW(TAG, "State changed to %s", this->state_str(state).c_str());
+      delay(10);
     }
 
     std::string MercuryComponent::state_str(State state) {
