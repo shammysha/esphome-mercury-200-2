@@ -108,6 +108,7 @@ namespace esphome {
           if (this->counter_ >= 14) {
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
+            this->flush();
           }
         } break;
 
@@ -129,6 +130,7 @@ namespace esphome {
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
             this->publish();
+            this->flush();
           }
         } break;
 
