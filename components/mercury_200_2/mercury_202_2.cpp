@@ -135,7 +135,6 @@ namespace esphome {
           break;
       }
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
-        this->flush();
         this->next_state(State::SEND_METRICS_CMD);
         this->last_updated_ = start;
 
