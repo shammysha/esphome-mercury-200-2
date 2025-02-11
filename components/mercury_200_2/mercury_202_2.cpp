@@ -49,9 +49,9 @@ namespace esphome {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
 
-      ESP_LOGW(TAG, "Metrics CMD: %s", format_hex_pretty(this->metrics_, 7).c_str());
+      ESP_LOGD(TAG, "Metrics CMD: %s", format_hex_pretty(this->metrics_, 7).c_str());
       delay(10);
-      ESP_LOGW(TAG, "Tariffs CMD: %s", format_hex_pretty(this->tariffs_, 7).c_str());
+      ESP_LOGD(TAG, "Tariffs CMD: %s", format_hex_pretty(this->tariffs_, 7).c_str());
       delay(10);
     }
 
@@ -113,8 +113,7 @@ namespace esphome {
           }
 
           if (this->counter_ >= 14) {
-            ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
-            delay(10);
+            ESP_LOGD(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
 
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
@@ -141,7 +140,7 @@ namespace esphome {
             if (avail > 0) this->buf_[this->counter_++] = this->read();
             d = millis();
           }
-          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
+          ESP_LOGD(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
           delay(10);
 
           if (this->counter_ >= 23) {
@@ -165,7 +164,7 @@ namespace esphome {
         this->next_state(State::SEND_METRICS_CMD);
         this->last_updated_ = start;
 
-        ESP_LOGW(TAG, "Starting data collection");
+        ESP_LOGD(TAG, "Starting data collection");
         delay(10);
       }
     }
@@ -215,7 +214,7 @@ namespace esphome {
 
     void MercuryComponent::next_state(State state) {
       this->state_ = state;
-      ESP_LOGW(TAG, "State changed to %s", this->state_str(state).c_str());
+      ESP_LOGD(TAG, "State changed to %s", this->state_str(state).c_str());
       delay(10);
     }
 
