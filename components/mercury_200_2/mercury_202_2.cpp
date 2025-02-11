@@ -115,7 +115,7 @@ namespace esphome {
               d = millis();
           }
           ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, sizeof(this->buf_)).c_str());
-          if (this->counter_ >= 23) {
+          if (this->counter_ >= 14) {
             this->state_ = State::SEND_TARIFFS_CMD;
             this->publish();
           }
