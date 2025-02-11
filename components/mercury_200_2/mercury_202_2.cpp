@@ -147,7 +147,7 @@ namespace esphome {
 
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
         this->next_state(State::SEND_METRICS_CMD);
-        this->last_updated_ = start;
+        this->last_updated_ = millis();
 
         ESP_LOGW(TAG, "Starting data collection");
       }
