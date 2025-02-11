@@ -109,7 +109,7 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-          while(count_available-- > 0 || d < start + 300) {
+          while(count_available-- > 0 || d < start + 30) {
               this->buf_[this->counter_] = this->read();
               this->counter_++;
               d = millis();
@@ -129,7 +129,7 @@ namespace esphome {
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
-          while(count_available-- > 0 || d < start + 300) {
+          while(count_available-- > 0 || d < start + 30) {
               this->buf_[this->counter_] = this->read();
               this->counter_++;
               d = millis();
