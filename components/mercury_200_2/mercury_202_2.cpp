@@ -1,6 +1,6 @@
 #include "mercury_202_2.h"
 #include "esphome/core/log.h"
-#include "esphome/core/hal.h"
+#include "esphome/core/helpers.h"
 
 namespace esphome {
   namespace mercury_200_2 {
@@ -44,20 +44,12 @@ namespace esphome {
       return crc;
     }
 
-    std::string print_hex(uint8_t *data) {
-      std::string res;
-      size_t len = sizeof(data);
-      char buf[5];
-      for(int i = 0; i < len; i++) {
-          sprintf(buf, "%02X", data[i]);
-          res += buf;
-      }
-      return res;
-    }
-
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
+
+      ESP_LOGW(TAG, "Metrics CMD: %s", format_hex_pretty(this->metrics_, 7).c_str());
+      ESP_LOGW(TAG, "Tariffs CMD: %s", format_hex_pretty(this->tariffs_, 7).c_str());
     }
 
     void MercuryComponent::dump_config() {
@@ -122,6 +114,7 @@ namespace esphome {
               this->counter_++;
               d = millis();
           }
+          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, sizeof(this->buf_)).c_str());
           if (this->counter_ >= 23) {
             this->state_ = State::SEND_TARIFFS_CMD;
             this->publish();
@@ -141,7 +134,7 @@ namespace esphome {
               this->counter_++;
               d = millis();
           }
-
+          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, sizeof(this->buf_)).c_str());
           if (this->counter_ >= 23) {
             this->state_ = State::IDLE;
             this->publish();
@@ -152,6 +145,7 @@ namespace esphome {
           break;
       }
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
+        this->flush();
         this->state_ = State::SEND_METRICS_CMD;
         this->last_updated_ = start;
 

@@ -12,13 +12,6 @@ static const char *TAG = "mercury_200_2";
 namespace esphome {
   namespace mercury_200_2 {
 
-    long pow(long a, int s);
-
-    template<size_t N = 2> long readLong(unsigned char *inp);
-    template<size_t N = 2> double readDouble(unsigned char *inp, int del);
-
-    uint16_t crc16(const uint8_t *data, uint8_t len);
-
     class MercuryComponent : public Component, public uart::UARTDevice {
       public:
         void setup() override;
