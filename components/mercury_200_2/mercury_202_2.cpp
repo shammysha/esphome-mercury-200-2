@@ -99,7 +99,7 @@ namespace esphome {
 
         case State::SEND_METRICS_CMD: {
           this->write_array(this->metrics_, 7);
-          this->flush();
+          // this->flush();
           this->next_state(State::WAIT_METRICS_INFO);
           this->counter_ = 0;
           this->awaiting_ = millis();
@@ -130,7 +130,7 @@ namespace esphome {
 
         case State::SEND_TARIFFS_CMD: {
           this->write_array(this->tariffs_, 7);
-          this->flush();
+          // this->flush();
           this->next_state(State::WAIT_TARIFFS_INFO);
           this->counter_ = 0;
           this->awaiting_ = millis();
