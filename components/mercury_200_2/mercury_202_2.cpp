@@ -79,8 +79,6 @@ namespace esphome {
     }
 
     void MercuryComponent::loop() {
-      delay(5);
-
       if (!this->is_ready()) {
         return;
       }
@@ -101,6 +99,15 @@ namespace esphome {
           }
         } break;
 
+        case State::IDLE: {
+          while(count_available-- > 0 || d < start + 300) {
+              this->buf_[this->counter_] = this->read();
+              this->counter_++;
+              d = millis();
+          }
+        } break;
+
+
         case State::SEND_METRICS_CMD: {
           this->write_array(this->metrics_, 7);
 
@@ -110,9 +117,10 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-          while(count_available-- > 0) {
+          while(count_available-- > 0 || d < start + 300) {
               this->buf_[this->counter_] = this->read();
               this->counter_++;
+              d = millis();
           }
           if (this->counter_ >= 23) {
             this->state_ = State::SEND_TARIFFS_CMD;
@@ -128,9 +136,10 @@ namespace esphome {
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
-          while(count_available-- > 0) {
+          while(count_available-- > 0 || d < start + 300) {
               this->buf_[this->counter_] = this->read();
               this->counter_++;
+              d = millis();
           }
 
           if (this->counter_ >= 23) {
