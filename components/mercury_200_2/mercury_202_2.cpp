@@ -110,7 +110,7 @@ namespace esphome {
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
 
-          } else if (this->awaiting_ + this->timeout_ > millis()) {
+          } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
             this->next_state(State::IDLE);
           }
@@ -136,7 +136,7 @@ namespace esphome {
             this->next_state(State::IDLE);
             this->publish();
 
-          } else if (this->awaiting_ + this->timeout_ > millis()) {
+          } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (%d + %d > %d)!", this->awaiting_, this->timeout_, millis());
             this->next_state(State::IDLE);
           }
