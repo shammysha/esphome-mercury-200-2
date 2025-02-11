@@ -103,12 +103,18 @@ namespace esphome {
             if (avail > 0) this->buf_[this->counter_++] = this->read();
             d = millis();
           }
-          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
 
           if (this->counter_ >= 14) {
+            ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
           }
+
+          if (this->last_updated_ + this->timeout_ > millis()) {
+            ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
+            this->next_state(State::IDLE);
+          }
+
         } break;
 
         case State::SEND_TARIFFS_CMD: {
@@ -129,11 +135,18 @@ namespace esphome {
             this->next_state(State::IDLE);
             this->publish();
           }
+
+          if (this->last_updated_ + this->timeout_ > millis()) {
+            ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
+            this->next_state(State::IDLE);
+          }
+
         } break;
 
         default:
           break;
       }
+
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
         this->next_state(State::SEND_METRICS_CMD);
         this->last_updated_ = start;

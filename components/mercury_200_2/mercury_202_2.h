@@ -20,6 +20,7 @@ namespace esphome {
         void set_address(int address) { this->address_ = address; }
         void set_startup_delay(int delay) { this->delay_ = delay; }
         void set_update_interval(int interval) { this->interval_ = interval; }
+        void set_request_timeout(int timeout) { this->timeout_ = timeout; }
 
 #ifdef USE_SENSOR
         SUB_SENSOR(power)
@@ -45,6 +46,8 @@ namespace esphome {
         int address_;
         int interval_;
         int delay_;
+        int timeout_{2000};
+
         unsigned long starttime_;
         unsigned long last_updated_{0};
 
