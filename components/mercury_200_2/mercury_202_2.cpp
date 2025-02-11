@@ -137,7 +137,7 @@ namespace esphome {
             this->publish();
 
           } else if (this->awaiting_ + this->timeout_ > millis()) {
-            ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
+            ESP_LOGE(TAG, "Request timeout occured (%d + %d > %d)!", this->awaiting_, this->timeout_, millis());
             this->next_state(State::IDLE);
           }
 
