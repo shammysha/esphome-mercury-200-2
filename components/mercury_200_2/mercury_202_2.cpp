@@ -81,6 +81,8 @@ namespace esphome {
         this->starttime_ = millis();
       }
 
+      int avail = this->available();
+
       switch (this->state_) {
 
         case State::NOT_READY: {
@@ -98,8 +100,8 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-          ESP_LOGW(TAG, "Available data length:: %d", this->available());
-          while(this->available() > 0 && d < start + 30) {
+          ESP_LOGW(TAG, "Available data length:: %d", avail);
+          while(avail-- > 0 && d < start + 100) {
               this->buf_[this->counter_++] = this->read();
               d = millis();
           }
@@ -119,8 +121,8 @@ namespace esphome {
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
-          ESP_LOGW(TAG, "Available data length:: %d", this->available());
-          while(this->available() > 0 && d < start + 30) {
+          ESP_LOGW(TAG, "Available data length:: %d", avail);
+          while(avail-- > 0 && d < start + 100) {
               this->buf_[this->counter_++] = this->read();
               d = millis();
           }
