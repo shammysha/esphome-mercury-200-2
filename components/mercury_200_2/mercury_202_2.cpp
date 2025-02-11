@@ -101,6 +101,7 @@ namespace esphome {
 
         case State::WAIT_METRICS_INFO: {
           if (count_available > 0) {
+            ESP_LOGW(TAG, "Available data length:: %d", count_available);
             while(count_available-- > 0 || d < start + 30) {
                 this->buf_[this->counter_++] = this->read();
                 d = millis();
@@ -121,6 +122,7 @@ namespace esphome {
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
+          ESP_LOGW(TAG, "Available data length:: %d", count_available);
           if (count_available > 0) {
             while(count_available-- > 0 || d < start + 30) {
                 this->buf_[this->counter_++] = this->read();
