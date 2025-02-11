@@ -44,6 +44,18 @@ namespace esphome {
       return crc;
     }
 
+    void print_hex(uint8_t *data) {
+      int i;
+      char buffer [17];
+      buffer[16] = 0;
+      for(j = 0; j < 8; j++)
+          sprintf(&buffer[2*j], "%02X", data[j]);
+      for (i = 0; i < sizeof(data); i++) {
+
+
+      }
+    }
+
     void MercuryComponent::setup() {
       this->calculateParams(this->metrics_, 0x63);
       this->calculateParams(this->tariffs_, 0x27);
@@ -78,7 +90,7 @@ namespace esphome {
         this->starttime_ = millis();
       }
 
-      auto count_available = available();
+      auto count_available = this->available();
 
       switch (this->state_) {
 
@@ -89,7 +101,7 @@ namespace esphome {
         } break;
 
         case State::SEND_METRICS_CMD: {
-          write_array(this->metrics_, 7);
+          this->write_array(this->metrics_, 7);
 
           this->state_ = State::WAIT_METRICS_INFO;
           this->counter_ = 0;
@@ -99,7 +111,7 @@ namespace esphome {
 
         case State::WAIT_METRICS_INFO: {
           while(count_available-- > 0) {
-              this->buf_[this->counter_] = read();
+              this->buf_[this->counter_] = this->read();
               this->counter_++;
           }
           if (this->counter_ >= 23) {
@@ -109,7 +121,7 @@ namespace esphome {
         } break;
 
         case State::SEND_TARIFFS_CMD: {
-          write_array(this->tariffs_, 7);
+          this->write_array(this->tariffs_, 7);
 
           this->state_ = State::WAIT_TARIFFS_INFO;
           this->counter_ = 0;
@@ -117,7 +129,7 @@ namespace esphome {
 
         case State::WAIT_TARIFFS_INFO: {
           while(count_available-- > 0) {
-              this->buf_[this->counter_] = read();
+              this->buf_[this->counter_] = this->read();
               this->counter_++;
           }
 
