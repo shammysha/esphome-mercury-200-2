@@ -203,12 +203,12 @@ namespace esphome {
 
     std::string MercuryComponent::state_str(State state) {
       switch(state) {
-        case NOT_READY: return "NOT_READY";
-        case IDLE: return "IDLE";
-        case SEND_METRICS_CMD: return "SEND_METRICS_CMD";
-        case WAIT_METRICS_INFO: return "WAIT_METRICS_INFO";
-        case SEND_TARIFFS_CMD: return "SEND_TARIFFS_CMD";
-        case WAIT_TARIFFS_INFO: return "WAIT_TARIFFS_INFO";
+        case State::NOT_READY: return "NOT_READY";
+        case State::IDLE: return "IDLE";
+        case State::SEND_METRICS_CMD: return "SEND_METRICS_CMD";
+        case State::WAIT_METRICS_INFO: return "WAIT_METRICS_INFO";
+        case State::SEND_TARIFFS_CMD: return "SEND_TARIFFS_CMD";
+        case State::WAIT_TARIFFS_INFO: return "WAIT_TARIFFS_INFO";
       }
       return "UNKNOWN";
     }
