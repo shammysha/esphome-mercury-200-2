@@ -103,7 +103,7 @@ namespace esphome {
             if (avail > 0) this->buf_[this->counter_++] = this->read();
             d = millis();
           }
-          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
 
           if (this->counter_ >= 14) {
             this->next_state(State::SEND_TARIFFS_CMD);
@@ -123,7 +123,7 @@ namespace esphome {
             if (avail > 0) this->buf_[this->counter_++] = this->read();
             d = millis();
           }
-          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
 
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
