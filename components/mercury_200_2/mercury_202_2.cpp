@@ -196,12 +196,12 @@ namespace esphome {
       }
     }
 
-    void next_state(State state) {
+    void MercuryComponent::next_state(State state) {
       this->state_ = state;
       ESP_LOGW(TAG, "State changed to %s", this->state_str(state).c_str());
     }
 
-    std::string state_str(State state) {
+    std::string MercuryComponent::state_str(State state) {
       switch(state) {
         case NOT_READY: return "NOT_READY";
         case IDLE: return "IDLE";
