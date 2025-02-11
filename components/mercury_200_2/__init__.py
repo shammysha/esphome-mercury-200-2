@@ -33,7 +33,7 @@ CONFIG_SCHEMA = cv.All(
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(MercuryComponent),
-            cv.Required(CONF_ADDRESS): cv.Range(min=100000, max=999999),
+            cv.Required(CONF_ADDRESS): cv.Number(precision=6, scale=0),
             cv.Optional(CONF_UPDATE_INTERVAL, default=DEFAULTS_UPDATE_INTERVAL): cv.update_interval,
             cv.Optional(CONF_STARTUP_DELAY, default=DEFAULTS_STARTUP_DELAY): cv.positive_time_period_milliseconds,
             cv.Optional(CONF_REQUEST_TIMEOUT, default=DEFAULTS_REQUEST_TIMEOUT): cv.positive_time_period_milliseconds
