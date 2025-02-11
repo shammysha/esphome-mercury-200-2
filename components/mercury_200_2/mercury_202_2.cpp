@@ -81,8 +81,6 @@ namespace esphome {
         this->starttime_ = millis();
       }
 
-      auto count_available = this->available();
-
       switch (this->state_) {
 
         case State::NOT_READY: {
@@ -100,9 +98,8 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-          if (count_available > 0) {
-            ESP_LOGW(TAG, "Available data length:: %d", count_available);
-            while(count_available-- > 0 || d < start + 30) {
+            ESP_LOGW(TAG, "Available data length:: %d", this->available());
+            while(this->available() > 0 || d < start + 30) {
                 this->buf_[this->counter_++] = this->read();
                 d = millis();
             }
@@ -122,14 +119,13 @@ namespace esphome {
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
-          ESP_LOGW(TAG, "Available data length:: %d", count_available);
-          if (count_available > 0) {
-            while(count_available-- > 0 || d < start + 30) {
-                this->buf_[this->counter_++] = this->read();
-                d = millis();
-            }
-            ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+          ESP_LOGW(TAG, "Available data length:: %d", this->available());
+          while(this->available() > 0 || d < start + 30) {
+              this->buf_[this->counter_++] = this->read();
+              d = millis();
           }
+          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
             this->publish();
