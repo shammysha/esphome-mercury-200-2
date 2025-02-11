@@ -95,6 +95,7 @@ namespace esphome {
           this->flush();
           this->next_state(State::WAIT_METRICS_INFO);
           this->counter_ = 0;
+          this->awaiting_ = millis();
 
         } break;
 
@@ -109,7 +110,7 @@ namespace esphome {
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
 
-          } else if (this->last_updated_ + this->timeout_ > millis()) {
+          } else if (this->awaiting_ + this->timeout_ > millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
             this->next_state(State::IDLE);
           }
@@ -121,6 +122,7 @@ namespace esphome {
           this->flush();
           this->next_state(State::WAIT_TARIFFS_INFO);
           this->counter_ = 0;
+          this->awaiting_ = millis();
         } break;
 
         case State::WAIT_TARIFFS_INFO: {
@@ -134,7 +136,7 @@ namespace esphome {
             this->next_state(State::IDLE);
             this->publish();
 
-          } else if (this->last_updated_ + this->timeout_ > millis()) {
+          } else if (this->awaiting_ + this->timeout_ > millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
             this->next_state(State::IDLE);
           }
@@ -147,7 +149,7 @@ namespace esphome {
 
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
         this->next_state(State::SEND_METRICS_CMD);
-        this->last_updated_ = millis();
+        this->last_updated_ = start;
 
         ESP_LOGW(TAG, "Starting data collection");
       }

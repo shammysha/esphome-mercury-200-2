@@ -47,6 +47,7 @@ namespace esphome {
         int interval_;
         int delay_;
         int timeout_{2000};
+        int awaiting_;
 
         unsigned long starttime_;
         unsigned long last_updated_{0};

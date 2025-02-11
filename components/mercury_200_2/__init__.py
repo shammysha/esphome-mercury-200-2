@@ -24,7 +24,7 @@ CONF_REQUEST_TIMEOUT = "request_timeout"
 
 DEFAULTS_UPDATE_INTERVAL = "60s"
 DEFAULTS_STARTUP_DELAY = "10s"
-DEFAULTS_REQUEST_TIMEOUT = "5s"
+DEFAULTS_REQUEST_TIMEOUT = "2s"
 
 mercury_200_2_ns = cg.esphome_ns.namespace("mercury_200_2")
 MercuryComponent = mercury_200_2_ns.class_("MercuryComponent", cg.Component, uart.UARTDevice)
