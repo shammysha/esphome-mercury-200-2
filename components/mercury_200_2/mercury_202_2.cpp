@@ -91,15 +91,6 @@ namespace esphome {
           }
         } break;
 
-        case State::IDLE: {
-          while(count_available-- > 0 || d < start + 300) {
-              this->buf_[this->counter_] = this->read();
-              this->counter_++;
-              d = millis();
-          }
-        } break;
-
-
         case State::SEND_METRICS_CMD: {
           this->write_array(this->metrics_, 7);
           this->flush();
