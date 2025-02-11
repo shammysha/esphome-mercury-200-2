@@ -108,9 +108,8 @@ namespace esphome {
             ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
-          }
 
-          if (this->last_updated_ + this->timeout_ > millis()) {
+          } else if (this->last_updated_ + this->timeout_ > millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
             this->next_state(State::IDLE);
           }
@@ -134,9 +133,8 @@ namespace esphome {
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
             this->publish();
-          }
 
-          if (this->last_updated_ + this->timeout_*2 > millis()) {
+          } else if (this->last_updated_ + this->timeout_ > millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
             this->next_state(State::IDLE);
           }
