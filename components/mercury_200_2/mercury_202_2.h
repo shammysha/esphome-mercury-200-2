@@ -47,11 +47,10 @@ namespace esphome {
         int interval_;
         int delay_;
         int timeout_{2000};
-        int awaiting_;
 
+        unsigned long awaiting_;
         unsigned long starttime_;
         unsigned long last_updated_{0};
-
         unsigned char metrics_[7]; // Байты на получене мгновенных значений
         unsigned char tariffs_[7]; // Байты на получение тарифа
 
