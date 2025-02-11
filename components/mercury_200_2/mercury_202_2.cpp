@@ -98,13 +98,13 @@ namespace esphome {
         } break;
 
         case State::WAIT_METRICS_INFO: {
-            ESP_LOGW(TAG, "Available data length:: %d", this->available());
-            while(this->available() > 0 || d < start + 30) {
-                this->buf_[this->counter_++] = this->read();
-                d = millis();
-            }
-            ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+          ESP_LOGW(TAG, "Available data length:: %d", this->available());
+          while(this->available() > 0 || d < start + 30) {
+              this->buf_[this->counter_++] = this->read();
+              d = millis();
           }
+          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_-1).c_str());
+
           if (this->counter_ >= 14) {
             this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
