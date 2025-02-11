@@ -51,5 +51,5 @@ async def to_code(config):
     cg.add(var.set_address(config[CONF_ADDRESS]))
     cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))    
     cg.add(var.set_startup_delay(config[CONF_STARTUP_DELAY]))
-    cg.add(var.set_request_timout(config[CONF_REQUEST_TIMEOUT]))
+    cg.add(var.set_request_timeout(config[CONF_REQUEST_TIMEOUT]))
     
