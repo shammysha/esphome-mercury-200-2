@@ -48,7 +48,7 @@ namespace esphome {
       std::string res;
       size_t len = sizeof(data);
       char buf[5];
-      for(int i = 0; i < len; i++)
+      for(int i = 0; i < len; i++) {
           sprintf(buf, "%02X", data[i]);
           res += buf;
       }
