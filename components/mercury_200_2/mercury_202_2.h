@@ -56,6 +56,8 @@ namespace esphome {
 
         void calculateParams(unsigned char *frame, unsigned char comm);
         void publish();
+        void next_state(State state);
+        std::string state_str(State state);
     };
   }
 }

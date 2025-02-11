@@ -87,7 +87,7 @@ namespace esphome {
 
         case State::NOT_READY: {
           if (this->is_ready() && start > this->starttime_ + this->delay_) {
-            this->state_ = State::IDLE;
+            this->next_state(State::IDLE);
           }
         } break;
 
@@ -103,7 +103,7 @@ namespace esphome {
         case State::SEND_METRICS_CMD: {
           this->write_array(this->metrics_, 7);
           this->flush();
-          this->state_ = State::WAIT_METRICS_INFO;
+          this->next_state(State::WAIT_METRICS_INFO);
           this->counter_ = 0;
 
         } break;
@@ -116,7 +116,7 @@ namespace esphome {
           }
           ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
           if (this->counter_ >= 14) {
-            this->state_ = State::SEND_TARIFFS_CMD;
+            this->next_state(State::SEND_TARIFFS_CMD);
             this->publish();
           }
         } break;
@@ -124,7 +124,7 @@ namespace esphome {
         case State::SEND_TARIFFS_CMD: {
           this->write_array(this->tariffs_, 7);
           this->flush();
-          this->state_ = State::WAIT_TARIFFS_INFO;
+          this->next_state(State::WAIT_TARIFFS_INFO);
           this->counter_ = 0;
         } break;
 
@@ -136,7 +136,7 @@ namespace esphome {
           }
           ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
           if (this->counter_ >= 23) {
-            this->state_ = State::IDLE;
+            this->next_state(State::IDLE);
             this->publish();
           }
         } break;
@@ -146,7 +146,7 @@ namespace esphome {
       }
       if (this->state_ != State::NOT_READY && start > this->last_updated_ + this->interval_) {
         this->flush();
-        this->state_ = State::SEND_METRICS_CMD;
+        this->next_state(State::SEND_METRICS_CMD);
         this->last_updated_ = start;
 
         ESP_LOGW(TAG, "Starting data collection");
@@ -194,6 +194,23 @@ namespace esphome {
         }
 #endif
       }
+    }
+
+    void next_state(State state) {
+      this->state_ = state;
+      ESP_LOGW(TAG, "State changed to %s", this->state_str(state).c_str());
+    }
+
+    std::string state_str(State state) {
+      switch(state) {
+        case NOT_READY: return "NOT_READY";
+        case IDLE: return "IDLE";
+        case SEND_METRICS_CMD: return "SEND_METRICS_CMD";
+        case WAIT_METRICS_INFO: return "WAIT_METRICS_INFO";
+        case SEND_TARIFFS_CMD: return "SEND_TARIFFS_CMD";
+        case WAIT_TARIFFS_INFO: return "WAIT_TARIFFS_INFO";
+      }
+      return "UNKNOWN";
     }
   }
 }
