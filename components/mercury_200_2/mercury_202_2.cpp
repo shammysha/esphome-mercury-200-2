@@ -114,7 +114,7 @@ namespace esphome {
               this->counter_++;
               d = millis();
           }
-          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, sizeof(this->buf_)).c_str());
+          ESP_LOGW(TAG, "Metrics INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
           if (this->counter_ >= 14) {
             this->state_ = State::SEND_TARIFFS_CMD;
             this->publish();
@@ -134,7 +134,7 @@ namespace esphome {
               this->counter_++;
               d = millis();
           }
-          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, sizeof(this->buf_)).c_str());
+          ESP_LOGW(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
           if (this->counter_ >= 23) {
             this->state_ = State::IDLE;
             this->publish();
