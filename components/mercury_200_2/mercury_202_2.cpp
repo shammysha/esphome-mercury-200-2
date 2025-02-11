@@ -44,16 +44,15 @@ namespace esphome {
       return crc;
     }
 
-    void print_hex(uint8_t *data) {
-      int i;
-      char buffer [17];
-      buffer[16] = 0;
-      for(j = 0; j < 8; j++)
-          sprintf(&buffer[2*j], "%02X", data[j]);
-      for (i = 0; i < sizeof(data); i++) {
-
-
+    std::string print_hex(uint8_t *data) {
+      std::string res;
+      size_t len = sizeof(data);
+      char buf[5];
+      for(int i = 0; i < len; i++)
+          sprintf(buf, "%02X", data[i]);
+          res += buf;
       }
+      return res;
     }
 
     void MercuryComponent::setup() {
