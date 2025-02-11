@@ -120,7 +120,6 @@ namespace esphome {
 
           } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (> %d)!", this->timeout_);
-            delay(10);
 
             this->next_state(State::IDLE);
           }
@@ -141,7 +140,6 @@ namespace esphome {
             d = millis();
           }
           ESP_LOGD(TAG, "Tariffs INFO: %s", format_hex_pretty(this->buf_, this->counter_).c_str());
-          delay(10);
 
           if (this->counter_ >= 23) {
             this->next_state(State::IDLE);
@@ -149,7 +147,6 @@ namespace esphome {
 
           } else if (this->awaiting_ + this->timeout_ < millis()) {
             ESP_LOGE(TAG, "Request timeout occured (%d + %d > %d)!", this->awaiting_, this->timeout_, millis());
-            delay(10);
 
             this->next_state(State::IDLE);
           }
@@ -165,7 +162,6 @@ namespace esphome {
         this->last_updated_ = start;
 
         ESP_LOGD(TAG, "Starting data collection");
-        delay(10);
       }
     }
 
