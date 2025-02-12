@@ -1,41 +1,95 @@
+
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import sensor
+from esphome.const import (
+    DEVICE_CLASS_POWER,
+    DEVICE_CLASS_CURRENT,
+    DEVICE_CLASS_VOLTAGE,
+    CONF_POWER,
+    CONF_CURRENT,
+    CONF_VOLTAGE,
+    CONF_TOTAL
+)
+
 from . import (
-    DlmsCosem,
-    dlms_cosem_ns,
-    obis_code,
-    CONF_DLMS_COSEM_ID,
-    CONF_OBIS_CODE,
-    CONF_DONT_PUBLISH,
-    CONF_CLASS,
+    MercuryComponent,
+    mercury_200_2_ns,
+    CONF_MERCURY_ID
 )
 
-DlmsCosemSensor = dlms_cosem_ns.class_("DlmsCosemSensor", sensor.Sensor)
 
-CONF_MULTIPLIER = "multiplier"
+AUTO_LOAD = ["mercury_200_2"]
 
-CONFIG_SCHEMA = cv.All(
-    sensor.sensor_schema(
-        DlmsCosemSensor,
-    ).extend(
-        {
-            cv.GenerateID(CONF_DLMS_COSEM_ID): cv.use_id(DlmsCosem),
-            cv.Required(CONF_OBIS_CODE): obis_code,
-            cv.Optional(CONF_DONT_PUBLISH, default=False): cv.boolean,
-            cv.Optional(CONF_MULTIPLIER, default=1.0): cv.float_,
-            cv.Optional(CONF_CLASS, default=3): cv.int_,
-        }
-    ),
-    cv.has_exactly_one_key(CONF_OBIS_CODE),
+CONF_TARIFFS = [f"tariff{x}" for x in range(1,4)]
+
+ICON_POWER = "mdi:flash"
+ICON_CURRENT = "mdi:current-ac"
+ICON_VOLTAGE = "mdi:sine-wave"
+ICON_TARIFF = "mdi:lightning-bolt"
+
+ICON_TRANSMISSION = "mdi:swap-horizontal"
+ICON_CONNECTION = "mdi:lan-connect"
+ICON_SESSION = "mdi:sync"
+
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(CONF_MERCURY_ID): cv.use_id(MercuryComponent),
+        cv.Optional(CONF_POWER): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_POWER,
+            icon=ICON_POWER,
+        ),
+        cv.Optional(CONF_CURRENT): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_CURRENT,
+            icon=ICON_CURRENT,
+        ),
+        cv.Optional(CONF_VOLTAGE): sensor.sensor_schema(
+            device_class=DEVICE_CLASS_VOLTAGE,
+            icon=ICON_VOLTAGE,
+        ),        
+        cv.Optional(CONF_TOTAL): sensor.sensor_schema(
+            icon=ICON_TARIFF,
+        ),        
+    }
 )
 
+for i in CONF_TARIFFS:
+    CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
+        cv.Schema({
+            cv.Optional(i): sensor.sensor_schema( 
+                icon=ICON_TARIFF 
+            )
+        })
+    )
 
 async def to_code(config):
-    component = await cg.get_variable(config[CONF_DLMS_COSEM_ID])
-    var = await sensor.new_sensor(config)
-    cg.add(var.set_obis_code(config[CONF_OBIS_CODE]))
-    cg.add(var.set_dont_publish(config.get(CONF_DONT_PUBLISH)))
-    cg.add(var.set_multiplier(config[CONF_MULTIPLIER]))
-    cg.add(var.set_obis_class(config[CONF_CLASS]))
-    cg.add(component.register_sensor(var))
+    meter = await cg.get_variable(config[CONF_MERCURY_ID])
+
+    if conf := config.get(CONF_POWER):
+        s = await sensor.new_sensor(config[CONF_POWER])
+        cg.add(meter.set_power_sensor(s))
+
+    if conf := config.get(CONF_CURRENT):
+        s = await sensor.new_sensor(config[CONF_CURRENT])
+        cg.add(meter.set_current_sensor(s))
+        
+    if conf := config.get(CONF_VOLTAGE):
+        s = await sensor.new_sensor(config[CONF_VOLTAGE])
+        cg.add(meter.set_voltage_sensor(s))       
+        
+    if conf := config.get(CONF_TOTAL):
+        s = await sensor.new_sensor(config[CONF_TOTAL])
+        cg.add(meter.set_total_sensor(s))  
+        
+    if conf := config.get(CONF_TARIFFS[0]):
+        s = await sensor.new_sensor(config[CONF_TARIFFS[0]])
+        cg.add(meter.set_tariff1_sensor(s))          
+    
+    if conf := config.get(CONF_TARIFFS[1]):
+        s = await sensor.new_sensor(config[CONF_TARIFFS[1]])
+        cg.add(meter.set_tariff2_sensor(s))
+
+    if conf := config.get(CONF_TARIFFS[2]):
+        s = await sensor.new_sensor(config[CONF_TARIFFS[2]])
+        cg.add(meter.set_tariff3_sensor(s))                
+                
